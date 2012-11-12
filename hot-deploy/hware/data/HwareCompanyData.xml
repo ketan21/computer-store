@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+    <Party partyId="Company" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="Company" groupName="Webex Computers" logoImageUrl=""/>
+    <PartyRole partyId="Company" roleTypeId="BILL_FROM_VENDOR"/>
+    <PartyRole partyId="Company" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyRole partyId="Company" roleTypeId="SHIP_FROM_VENDOR"/>
+    <PartyRole partyId="Company" roleTypeId="INTERNAL_ORGANIZATIO"/>
+
+    <!-- Postal Address -->
+    <ContactMech contactMechId="1000" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PartyContactMech partyId="Company" contactMechId="1000" fromDate="2001-01-01 00:00:00.000" allowSolicitation="Y"/>
+    <PostalAddress contactMechId="1000" toName="Webex Computers" address1="C-33/34, Shreevardhan Complex" address2="4- RNT Marg" city="Indore" postalCode="452001" countryGeoId="IND" stateProvinceGeoId="IN-MP"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="1000" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-01-01 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="1000" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-01-01 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="1000" contactMechPurposeTypeId="PAYMENT_LOCATION" fromDate="2001-01-01 00:00:00.000"/>
+
+    <!-- Phone Number -->
+    <ContactMech contactMechId="1001" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="1001" contactNumber="0731-4055726"/>
+    <PartyContactMech partyId="Company" contactMechId="1001" fromDate="2001-05-15 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="1001" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2001-05-15 00:00:00.000"/>
+
+    <!-- Mobile Number -->
+    <ContactMech contactMechId="1002" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="1002" contactNumber="9589119605"/>
+    <PartyContactMech partyId="Company" contactMechId="1002" fromDate="2001-05-15 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="1002" contactMechPurposeTypeId="PHONE_MOBILE" fromDate="2001-05-15 00:00:00.000"/>
+
+    <!-- Email Address -->
+    <ContactMech contactMechId="1004" contactMechTypeId="EMAIL_ADDRESS" infoString="webexcomputer@gmail.com"/>
+    <PartyContactMech partyId="Company" contactMechId="1004" fromDate="2001-05-15 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="1004" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2001-05-15 00:00:00.000"/>
+
+    <!-- GL journal for suspended transactions (failed post) -->
+    <GlJournal organizationPartyId="Company" glJournalId="ERROR_JOURNAL" glJournalName="Suspense transactions"/>
+
+    <PartyAcctgPreference partyId="Company" taxFormId="" cogsMethodId="COGS_AVG_COST" baseCurrencyUomId="INR" 
+            invoiceSequenceEnumId="INVSQ_ENF_SEQ" invoiceIdPrefix="" quoteSequenceEnumId="INVSQ_ENF_SEQ" quoteIdPrefix="WEBEX"
+            orderSequenceEnumId="INVSQ_ENF_SEQ" orderIdPrefix="" errorGlJournalId="ERROR_JOURNAL"/>
+
+</entity-engine-xml>

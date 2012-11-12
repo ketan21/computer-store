@@ -1,0 +1,48 @@
+Index: applications/order/src/org/ofbiz/order/order/OrderLookupServices.java
+===================================================================
+--- applications/order/src/org/ofbiz/order/order/OrderLookupServices.java	(revision 1148274)
++++ applications/order/src/org/ofbiz/order/order/OrderLookupServices.java	(working copy)
+@@ -309,13 +309,36 @@
+             conditions.add(EntityCondition.makeCondition("gatewayScoreResult", gatewayScoreResult));
+         }
+ 
+-        // add the role data to the view
+-        if (roleTypeList != null || partyId != null) {
+-            dve.addMemberEntity("OT", "OrderRole");
+-            dve.addAlias("OT", "partyId");
+-            dve.addAlias("OT", "roleTypeId");
+-            dve.addViewLink("OH", "OT", Boolean.FALSE, UtilMisc.toList(new ModelKeyMap("orderId", "orderId")));
+-        }
++                 String firstName = (String) context.get("firstName");
++                String lastName = (String) context.get("lastName");
++         
++                 // add the role data to the view
++                if (roleTypeList != null || partyId != null || firstName!=null || lastName!=null ) {
++                     dve.addMemberEntity("OT", "OrderRole");
++                     dve.addAlias("OT", "partyId");
++                     dve.addAlias("OT", "roleTypeId");
++                     dve.addViewLink("OH", "OT", Boolean.FALSE, UtilMisc.toList(new ModelKeyMap("orderId", "orderId")));
++                 }
++         
++              //find order by first name
++               
++                if (firstName != null || lastName != null) {
++                	dve.addMemberEntity("PER", "Person");
++                	dve.addAlias("PER", "firstName");
++                	dve.addAlias("PER", "lastName");
++                	dve.addViewLink("OT", "PER", Boolean.FALSE, UtilMisc.toList(new ModelKeyMap("partyId", "partyId")));
++                	}
++                
++                if (firstName != null) {
++                	paramList.add("firstName=" + firstName);
++                    conditions.add((EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("firstName"), EntityComparisonOperator.EQUALS, EntityFunction.UPPER(firstName))));
++                    
++                }
++                if (lastName != null) {
++                	paramList.add("lastName=" + lastName);
++                    conditions.add((EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("lastName"), EntityComparisonOperator.EQUALS, EntityFunction.UPPER(lastName))));
++                	
++                }
+ 
+         if (UtilValidate.isNotEmpty(partyId)) {
+             paramList.add("partyId=" + partyId);

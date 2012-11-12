@@ -1,0 +1,16 @@
+Index: applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java
+===================================================================
+--- applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java	(revision 1134568)
++++ applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java	(working copy)
+@@ -1298,6 +1298,11 @@
+         }
+         return partyId;
+     }
++    
++    // method to get customer paryid
++    public String getCustomerPartyId(){
++      return this.orderPartyId;
++    }
+ 
+     public void setAutoSaveListId(String id) {
+         this.autoSaveListId = id;

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entity-engine-xml>
+
+    <ProdCatalog prodCatalogId="MyCatalog" catalogName="My Catalog" useQuickAdd="N"/>
+    <ProductStoreCatalog productStoreId="4000" prodCatalogId="MyCatalog" fromDate="2001-05-13 12:00:00.0" sequenceNum="1" />
+    <ProductStoreCatalog productStoreId="5000" prodCatalogId="MyCatalog" fromDate="2001-05-13 12:00:00.0" sequenceNum="1" />
+    <ProductCategoryType description="Tax" hasTable="N" parentTypeId="" productCategoryTypeId="TAX_CATEGORY"/>
+    <ProductCategory categoryName="Root"
+            longDescription="Root Category" productCategoryId="MyCategory" productCategoryTypeId="CATALOG_CATEGORY"/>
+   
+    <ProdCatalogCategory prodCatalogId="MyCatalog" productCategoryId="MyCategory" fromDate="2001-05-13 12:00:00.0"
+        sequenceNum="1" prodCatalogCategoryTypeId="PCCT_BROWSE_ROOT"/>
+
+    <ProductCategory longDescription="Catalog for Motherboards"
+        primaryParentCategoryId="MyCategory" productCategoryId="motherboard" categoryName="Motherboard" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="Catalog for Monitors"
+        primaryParentCategoryId="MyCategory" productCategoryId="monitor" categoryName="Monitor" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="Catalog for Mouse"
+        primaryParentCategoryId="MyCategory" productCategoryId="mouse" categoryName="Mouse" productCategoryTypeId="CATALOG_CATEGORY"/>
+
+    <ProductCategory longDescription="Catalog for INTEL Motherboards"
+        primaryParentCategoryId="motherboard" productCategoryId="intel_motherboard" categoryName="Intel Motherboards" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="Catalog for MSI Motherboards"
+        primaryParentCategoryId="motherboard" productCategoryId="msi_motherboard" categoryName="MSI Motherboards" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="Catalog for ASUS Motherboards"
+        primaryParentCategoryId="motherboard" productCategoryId="asus_motherboard" categoryName="ASUS Motherboards" productCategoryTypeId="CATALOG_CATEGORY"/>
+
+    <ProductCategory longDescription="Catalog for LG Monitors"
+        primaryParentCategoryId="monitor" productCategoryId="lg_monitor" categoryName="LG Monitor" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="Catalog for SAMSUNG Monitors"
+        primaryParentCategoryId="monitor" productCategoryId="samsung_monitor" categoryName="SAMSUNG Monitor" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="Catalog for INTEX Monitors"
+        primaryParentCategoryId="monitor" productCategoryId="intex_monitor" categoryName="INTEX Monitor" productCategoryTypeId="CATALOG_CATEGORY"/>
+
+    <ProductCategory longDescription="Catalog for INTEX Mouse"
+        primaryParentCategoryId="mouse" productCategoryId="intex_mouse" categoryName="INTEX Mouse" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="Catalog for DELL Mouse"
+        primaryParentCategoryId="mouse" productCategoryId="dell_mouse" categoryName="DELL Mouse" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="Catalog for iBALL Mouse"
+        primaryParentCategoryId="mouse" productCategoryId="iball_mouse" categoryName="iBALL Mouse" productCategoryTypeId="CATALOG_CATEGORY"/>
+
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="MyCategory" productCategoryId="motherboard"/>
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="MyCategory" productCategoryId="monitor"/>
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="MyCategory" productCategoryId="mouse"/>
+
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="motherboard" productCategoryId="intel_motherboard"/>
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="motherboard" productCategoryId="msi_motherboard"/>
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="motherboard" productCategoryId="asus_motherboard"/>
+
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="monitor" productCategoryId="lg_monitor"/>
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="monitor" productCategoryId="samsung_monitor"/>
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="monitor" productCategoryId="intex_monitor"/>
+
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="mouse" productCategoryId="intex_mouse"/>
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="mouse" productCategoryId="dell_mouse"/>
+    <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="mouse" productCategoryId="iball_mouse"/>
+
+    
+<!--  Finished making categories Now, making Product Data -->
+
+<!-- Motherboard's Data -->
+
+    <Product productId="INTEL_MOTHERBOARD_94" productTypeId="FINISHED_GOOD" primaryProductCategoryId="intel_motherboard" productName="INTEL 945"
+             description="Intel 945 chipset based motherboard." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="INTEL_MOTHERBOARD_HM" productTypeId="FINISHED_GOOD" primaryProductCategoryId="intel_motherboard" productName="INTEL HM57"
+             description="Intel HM57 chipset based motherboard." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="INTEL_MOTHERBOARD_91" productTypeId="FINISHED_GOOD" primaryProductCategoryId="intel_motherboard" productName="INTEL 915"
+             description="Intel 945 chipset based motherboard." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+
+    <Product productId="MSI_MOTHERBOARD_X50" productTypeId="FINISHED_GOOD" primaryProductCategoryId="msi_motherboard" productName="MSI X50"
+             description="MSI X50 chipset based motherboard." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="MSI_MOTHERBOARD_X51" productTypeId="FINISHED_GOOD" primaryProductCategoryId="msi_motherboard" productName="MSI X51"
+             description="MSI X51 chipset based motherboard" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="MSI_MOTHERBOARD_X52" productTypeId="FINISHED_GOOD" primaryProductCategoryId="msi_motherboard" productName="MSI X52"
+             description="MSI X52 chipset based motherboard." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+
+    <Product productId="ASUS_MOTHERBOARD_P1" productTypeId="FINISHED_GOOD" primaryProductCategoryId="asus_motherboard" productName="ASUS P1"
+             description="ASUS P1 chipset based motherboard." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="ASUS_MOTHERBOARD_P2" productTypeId="FINISHED_GOOD" primaryProductCategoryId="asus_motherboard" productName="ASUS P2"
+             description="ASUS P2 chipset based motherboard." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="ASUS_MOTHERBOARD_P3" productTypeId="FINISHED_GOOD" primaryProductCategoryId="asus_motherboard" productName="ASUS P3"
+             description="ASUS P3 chipset based motherboard." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+
+<!-- Monitor's Data -->
+
+    <Product productId="LG_MONITOR_100" productTypeId="FINISHED_GOOD" primaryProductCategoryId="lg_monitor" productName="LG 700E"
+             description="LG 2001 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="LG_MONITOR_200" productTypeId="FINISHED_GOOD" primaryProductCategoryId="lg_monitor" productName="LG Studioworks"
+             description="LG 2003 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="LG_MONITOR_300" productTypeId="FINISHED_GOOD" primaryProductCategoryId="lg_monitor" productName="LG 800E"
+             description="LG 2005 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+
+    <Product productId="SAMSUNG_MONITOR_S1" productTypeId="FINISHED_GOOD" primaryProductCategoryId="samsung_monitor" productName="SAMSUNG S1"
+             description="Samsung 2005 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="SAMSUNG_MONITOR_S2" productTypeId="FINISHED_GOOD" primaryProductCategoryId="samsung_monitor" productName="SAMSUNG S2"
+             description="Samsung 2006 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="SAMSUNG_MONITOR_S3" productTypeId="FINISHED_GOOD" primaryProductCategoryId="samsung_monitor" productName="SAMSUNG S3"
+             description="SAMSUNG 2008 series monitor." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+
+    <Product productId="INTEX_MONITOR_I1" productTypeId="FINISHED_GOOD" primaryProductCategoryId="intex_monitor" productName="INTEX I1"
+             description="INTEX 2005 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="INTEX_MONITOR_I2" productTypeId="FINISHED_GOOD" primaryProductCategoryId="intex_monitor" productName="INTEX I2"
+             description="INTEX 2006 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="INTEX_MONITOR_I3" productTypeId="FINISHED_GOOD" primaryProductCategoryId="intex_monitor" productName="INTEX I3"
+             description="INTEX 2007 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+
+<!-- Mouse's Data -->
+
+
+    <Product productId="DELL_MOUSE_D1" productTypeId="FINISHED_GOOD" primaryProductCategoryId="dell_mouse" productName="DELL D1"
+             description="LG 2001 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"/>
+    <Product productId="DELL_MOUSE_D2" productTypeId="FINISHED_GOOD" primaryProductCategoryId="dell_mouse" productName="DELL D2"
+             description="LG 2003 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="DELL_MOUSE_D3" productTypeId="FINISHED_GOOD" primaryProductCategoryId="dell_mouse" productName="DELL D3"
+             description="LG 2005 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+
+    <Product productId="IBALL_MOUSE_I1" productTypeId="FINISHED_GOOD" primaryProductCategoryId="iball_mouse" productName="iBALL i1"
+             description="Samsung 2005 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="IBALL_MOUSE_I2" productTypeId="FINISHED_GOOD" primaryProductCategoryId="iball_mouse" productName="iBALL i2"
+             description="Samsung 2006 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="IBALL_MOUSE_I3" productTypeId="FINISHED_GOOD" primaryProductCategoryId="iball_mouse" productName="iBALL i3"
+             description="SAMSUNG 2008 series monitor." taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+
+    <Product productId="INTEX_MOUSE_I1" productTypeId="FINISHED_GOOD" primaryProductCategoryId="intex_mouse" productName="INTEX MOUSE SMALL"
+             description="INTEX 2005 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="INTEX_MOUSE_I2" productTypeId="FINISHED_GOOD" primaryProductCategoryId="intex_mouse" productName="INTEX MOUSE MEDIUM"
+             description="INTEX 2006 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <Product productId="INTEX_MOUSE_I3" productTypeId="FINISHED_GOOD" primaryProductCategoryId="intex_mouse" productName="INTEX MOUSE LARGE"
+             description="INTEX 2007 series monitor" taxable="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N"
+             createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+
+<!-- Mapping Products to categories -->
+
+    <ProductCategoryMember productCategoryId="intex_mouse" productId="INTEX_MOUSE_I1" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="intex_mouse" productId="INTEX_MOUSE_I2" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="intex_mouse" productId="INTEX_MOUSE_I3" fromDate="2001-05-13 12:00:00.0"/>
+
+
+    <ProductCategoryMember productCategoryId="dell_mouse" productId="DELL_MOUSE_D1" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="dell_mouse" productId="DELL_MOUSE_D2" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="dell_mouse" productId="DELL_MOUSE_D3" fromDate="2001-05-13 12:00:00.0"/>
+
+    <ProductCategoryMember productCategoryId="iball_mouse" productId="IBALL_MOUSE_I1" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="iball_mouse" productId="IBALL_MOUSE_I2" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="iball_mouse" productId="IBALL_MOUSE_I3" fromDate="2001-05-13 12:00:00.0"/>
+
+
+    <ProductCategoryMember productCategoryId="lg_monitor" productId="LG_MONITOR_100" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="lg_monitor" productId="LG_MONITOR_200" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="lg_monitor" productId="LG_MONITOR_300" fromDate="2001-05-13 12:00:00.0"/>
+
+    <ProductCategoryMember productCategoryId="samsung_monitor" productId="SAMSUNG_MONITOR_S1" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="samsung_monitor" productId="SAMSUNG_MONITOR_S2" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="samsung_monitor" productId="SAMSUNG_MONITOR_S3" fromDate="2001-05-13 12:00:00.0"/>
+
+    <ProductCategoryMember productCategoryId="intex_monitor" productId="INTEX_MONITOR_I1" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="intex_monitor" productId="INTEX_MONITOR_I2" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="intex_monitor" productId="INTEX_MONITOR_I3" fromDate="2001-05-13 12:00:00.0"/>
+
+    <ProductCategoryMember productCategoryId="asus_motherboard" productId="ASUS_MOTHERBOARD_P1" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="asus_motherboard" productId="ASUS_MOTHERBOARD_P2" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="asus_motherboard" productId="ASUS_MOTHERBOARD_P3" fromDate="2001-05-13 12:00:00.0"/>
+
+    <ProductCategoryMember productCategoryId="intel_motherboard" productId="INTEL_MOTHERBOARD_91" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="intel_motherboard" productId="INTEL_MOTHERBOARD_94" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="intel_motherboard" productId="INTEL_MOTHERBOARD_HM" fromDate="2001-05-13 12:00:00.0"/>
+
+    <ProductCategoryMember productCategoryId="msi_motherboard" productId="MSI_MOTHERBOARD_X50" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="msi_motherboard" productId="MSI_MOTHERBOARD_X51" fromDate="2001-05-13 12:00:00.0"/>
+    <ProductCategoryMember productCategoryId="msi_motherboard" productId="MSI_MOTHERBOARD_X52" fromDate="2001-05-13 12:00:00.0"/>
+
+    <ProductPrice productId="INTEL_MOTHERBOARD_91" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="INR"
+                  productStoreGroupId="_NA_" fromDate="2001-05-13 12:00:00.0" price="100" />
+    <ProductPrice productId="INTEL_MOTHERBOARD_94" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="INR"
+                  productStoreGroupId="_NA_" fromDate="2001-05-13 12:00:00.0" price="100" />
+    <ProductPrice productId="INTEL_MOTHERBOARD_HM" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="INR"
+                  productStoreGroupId="_NA_" fromDate="2001-05-13 12:00:00.0" price="100" />
+
+    <InventoryItem facilityId="WebexIndore" locationSeqId="TLTLTLUL01" datetimeReceived="2008-08-01 08:00:00.000"
+        inventoryItemId="9000" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="INTEL_MOTHERBOARD_94" ownerPartyId="Company" currencyUomId="INR" unitCost="2.5"/>
+    <InventoryItemDetail inventoryItemId="9000" inventoryItemDetailSeqId="0001" effectiveDate="2001-05-13 12:00:00.0" availableToPromiseDiff="500" quantityOnHandDiff="500" accountingQuantityDiff="500"/>
+
+    <InventoryItem facilityId="WebexIndore" locationSeqId="TLTLTLUL01" datetimeReceived="2008-08-01 08:00:00.000"
+        inventoryItemId="9001" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="INTEL_MOTHERBOARD_91" ownerPartyId="Company" currencyUomId="INR" unitCost="2.5"/>
+    <InventoryItemDetail inventoryItemId="9001" inventoryItemDetailSeqId="0002" effectiveDate="2001-05-13 12:00:00.0" availableToPromiseDiff="500" quantityOnHandDiff="500" accountingQuantityDiff="500"/>
+
+    <InventoryItem facilityId="WebexIndore" locationSeqId="TLTLTLUL01" datetimeReceived="2008-08-01 08:00:00.000"
+        inventoryItemId="9002" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="INTEL_MOTHERBOARD_HM" ownerPartyId="Company" currencyUomId="INR" unitCost="2.5"/>
+    <InventoryItemDetail inventoryItemId="9002" inventoryItemDetailSeqId="0003" effectiveDate="2001-05-13 12:00:00.0" availableToPromiseDiff="500" quantityOnHandDiff="500" accountingQuantityDiff="500"/>
+
+    <InventoryItem facilityId="WebexBhopal" locationSeqId="TLTLTLUL01" datetimeReceived="2008-08-01 08:00:00.000"
+        inventoryItemId="9003" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="INTEL_MOTHERBOARD_94" ownerPartyId="Company" currencyUomId="INR" unitCost="2.5"/>
+    <InventoryItemDetail inventoryItemId="9003" inventoryItemDetailSeqId="0004" effectiveDate="2001-05-13 12:00:00.0" availableToPromiseDiff="100" quantityOnHandDiff="100" accountingQuantityDiff="100"/>
+
+    <InventoryItem facilityId="WebexBhopal" locationSeqId="TLTLTLUL01" datetimeReceived="2008-08-01 08:00:00.000"
+        inventoryItemId="9004" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="INTEL_MOTHERBOARD_91" ownerPartyId="Company" currencyUomId="INR" unitCost="2.5"/>
+    <InventoryItemDetail inventoryItemId="9004" inventoryItemDetailSeqId="0005" effectiveDate="2001-05-13 12:00:00.0" availableToPromiseDiff="100" quantityOnHandDiff="100" accountingQuantityDiff="100"/>
+
+    <InventoryItem facilityId="WebexBhopal" locationSeqId="TLTLTLUL01" datetimeReceived="2008-08-01 08:00:00.000"
+        inventoryItemId="9005" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="INTEL_MOTHERBOARD_HM" ownerPartyId="Company" currencyUomId="INR" unitCost="2.5"/>
+    <InventoryItemDetail inventoryItemId="9005" inventoryItemDetailSeqId="0006" effectiveDate="2001-05-13 12:00:00.0" availableToPromiseDiff="100" quantityOnHandDiff="100" accountingQuantityDiff="100"/>
+
+     <ProductStoreFacility productStoreId="4000" facilityId="WebexIndore" fromDate="2010-05-13 12:00:00.0"/>
+     <ProductStoreFacility productStoreId="5000" facilityId="WebexBhopal" fromDate="2010-05-13 12:00:00.0"/>
+
+     <ProductFacility productId="INTEL_MOTHERBOARD_91" facilityId="WebexBhopal" minimumStock="2" reorderQuantity="10" daysToShip="15"/>
+
+     <ProductFacility productId="INTEL_MOTHERBOARD_94" facilityId="WebexBhopal" minimumStock="2" reorderQuantity="10" daysToShip="15"/>
+
+     <ProductFacility productId="INTEL_MOTHERBOARD_HM" facilityId="WebexBhopal" minimumStock="2" reorderQuantity="10" daysToShip="15"/>
+
+     <ProductFacility productId="INTEL_MOTHERBOARD_91" facilityId="WebexIndore" minimumStock="2" reorderQuantity="10" daysToShip="15"/>
+
+     <ProductFacility productId="INTEL_MOTHERBOARD_94" facilityId="WebexIndore" minimumStock="2" reorderQuantity="10" daysToShip="15"/>
+
+     <ProductFacility productId="INTEL_MOTHERBOARD_HM" facilityId="WebexIndore" minimumStock="2" reorderQuantity="10" daysToShip="15"/>
+
+</entity-engine-xml>

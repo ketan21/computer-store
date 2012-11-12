@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
+
+    <form name="ListFacilityInventoryByProduct" type="list" target="" title="" list-name="inventoryByProduct"
+        odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar"
+        paginate-target="${facilityInventoryByProductScreen}" override-list-size="${overrideListSize}">
+      <row-actions>
+        <script location="component://product/webapp/facility/WEB-INF/actions/facility/ComputeProductSellThroughData.groovy"/>
+      </row-actions>
+      <field name="items" title="${uiLabelMap.ProductProductId}" widget-style="buttontext">
+        <hyperlink target="EditFacilityInventoryItems" description="${productId}">
+          <parameter param-name="productId"/>
+          <parameter param-name="facilityId"/>
+        </hyperlink>
+      </field>
+      <field name="productId" title="${uiLabelMap.CommonDescription}">
+        <display-entity entity-name="Product" description="${internalName}">
+          <sub-hyperlink target="/catalog/control/EditProduct" target-type="inter-app" description="${uiLabelMap.ProductCatalog}" link-style="buttontext">
+            <parameter param-name="productId"/>
+          </sub-hyperlink>
+        </display-entity>
+      </field>
+      <!-- <field name="totalAvailableToPromise" title="${uiLabelMap.CommonTotal} ${uiLabelMap.ProductAtp}"><display/></field> -->
+      <field name="totalQuantityOnHand" title="${uiLabelMap.CommonTotal} ${uiLabelMap.ProductQoh}"><display/></field>
+      <field name="defaultPrice" title="${uiLabelMap.ProductDefaultPrice}"><display/></field>
+    </form>
+    
+    <form name="ProductSearchForm" type="list" list-name="listIt" header-row-style="header-row-2"
+        paginate-target="ViewFacilityInventoryByProduct" odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+        <actions>
+            <service service-name="performFind" result-map="results" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="entityName" value="InventoryItemAndLocation"/>
+                <field-map field-name="orderBy" value="statusId|quantityOnHandTotal|serialNumber"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+            </service>
+        </actions>
+        <field name="items" title="${uiLabelMap.ProductProductId}" widget-style="buttontext">
+        <hyperlink target="EditFacilityInventoryItems" description="${productId}">
+          <parameter param-name="productId"/>
+          <parameter param-name="facilityId"/>
+        </hyperlink>
+      </field>
+      <field name="productId" title="${uiLabelMap.CommonDescription}">
+        <display-entity entity-name="Product" description="${internalName}">
+          <sub-hyperlink target="EditProduct" target-type="inter-app" description="${uiLabelMap.ProductCatalog}" link-style="buttontext">
+            <parameter param-name="productId"/>
+          </sub-hyperlink>
+        </display-entity>
+      </field>
+      <!-- <field name="totalAvailableToPromise" title="${uiLabelMap.CommonTotal} ${uiLabelMap.ProductAtp}"><display/></field> -->
+      <field name="totalQuantityOnHand" title="${uiLabelMap.CommonTotal} ${uiLabelMap.ProductQoh}"><display description="${quantityOnHandTotal}"/></field>
+    </form>
+    
+     <form name="SelectFacility" type="single" target="EditFacility"
+        odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <field name="facilityId">
+            <drop-down allow-empty="false">
+                <entity-options description="${facilityName}" entity-name="Facility" key-field-name="facilityId"/>
+            </drop-down>
+        </field>
+        <field name="showProductFromAllFacility" ><check><option key="showProductFromAllFacility" description="   Show Product From All Facility"/></check></field>
+        <field name="selectButton" title="${uiLabelMap.CommonSubmit}"><submit button-type="button"/></field>
+    </form>
+    <!-- Form used in LookupBulkAddProducts Screen of Order component -->
+    <form name="LookupBulkAddProducts" type="multi" use-row-submit="true" list-name="productList" title="" target="BulkAddProducts"
+        odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="LookupBulkAddProducts">
+        <field name="productId"  title="${uiLabelMap.ProductProductId}" widget-style="buttontext">
+            <hyperlink description="${productId}" target="/catalog/control/EditProductInventoryItems" target-type="inter-app">
+                <parameter param-name="productId"/>
+            </hyperlink>
+        </field>
+        <field name="brandName" title="${uiLabelMap.ProductBrandName}"><display/></field>
+        <field name="internalName"><display/></field>
+        <field name="quantity" title="${uiLabelMap.OrderQuantity}">
+            <text size="5" maxlength="10"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.OrderAddToOrder}" widget-style="smallSubmit">
+            <submit/>
+        </field>
+    </form>
+    <form name="FindQuotes" target="FindQuote" title="" type="single"
+        header-row-style="header-row" default-table-style="basic-table">
+        <auto-fields-entity entity-name="Quote" default-field-type="find"/>
+        <field name="quoteId" title="${uiLabelMap.OrderOrderQuoteId}"></field>
+        <field name="quoteTypeId"><hidden/></field>
+        <field name="salesChannelEnumId"><hidden/></field>
+        <field name="partyId" title="${uiLabelMap.PartyPartyId}">
+            <lookup target-form-name="LookupPartyName"/>
+        </field>
+        <field name="issueDate" title="${uiLabelMap.OrderOrderQuoteIssueDate}"></field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}"><hidden/></field>
+        <field name="quoteName" title="${uiLabelMap.OrderOrderQuoteName}"><hidden/></field>
+        <field name="description"><hidden/></field>
+        <field name="validFromDate"><hidden/></field>
+        <field name="validThruDate"><hidden/></field>
+        <field name="currencyUomId"><hidden/></field>
+        <field name="productStoreId" title="${uiLabelMap.ProductProductStore}">
+            <drop-down allow-empty="true">
+                <entity-options description="${storeName}" entity-name="ProductStore" key-field-name="productStoreId">
+                    <entity-order-by field-name="storeName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+        <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
+    </form>
+
+    <form name="ListQuotes" list-name="listIt" target="" title="" type="list"
+        odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="FindQuote">
+          <actions>
+              <service service-name="performFind" result-map="result" result-map-list="listIt">
+                  <field-map field-name="inputFields" from-field="parameters"/>
+                  <field-map field-name="entityName" value="Quote"/>
+                  <field-map field-name="viewIndex" from-field="viewIndex"/>
+                  <field-map field-name="viewSize" from-field="viewSize"/>
+              </service>
+          </actions>
+        <auto-fields-entity entity-name="Quote" default-field-type="display"/>
+        <field name="quoteId" title="${uiLabelMap.OrderOrderQuoteId}" widget-style="buttontext">
+            <hyperlink also-hidden="false" description="${quoteId}" target="ViewQuote">
+                <parameter param-name="quoteId"/>
+            </hyperlink>
+        </field>
+        <field name="quoteTypeId" title="${uiLabelMap.OrderOrderQuoteTypeId}"><display-entity entity-name="QuoteType"/></field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}"><display-entity also-hidden="false" entity-name="StatusItem"/></field>
+        <field name="partyId" title="${uiLabelMap.PartyPartyId}"></field>
+        <field name="quoteName" title="${uiLabelMap.OrderOrderQuoteName}"><hidden/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><hidden/></field>
+        <field name="issueDate" title="${uiLabelMap.OrderOrderQuoteIssueDate}"></field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}"></field>
+        <field name="currencyUomId" title="${uiLabelMap.CommonCurrency}"><hidden/></field>
+        <field name="validFromDate" title="${uiLabelMap.CommonValidFromDate}"><hidden/></field>
+        <field name="validThruDate" title="${uiLabelMap.CommonValidThruDate}"><hidden/></field>
+    </form>
+      <form name="ListCategoryByTax" type="list" target="" title="" list-name="TaxCategories"
+        odd-row-style="alternate-row" header-row-style="header-row" default-table-style="basic-table hover-bar"
+        paginate-target="" override-list-size="${overrideListSize}">
+       <field name="productCategoryId" title="Category" widget-style="buttontext"><display/></field>
+       <field name="categoryName" title="Category Name" widget-style="buttontext"><display/></field>
+       </form>
+       
+      <form name="ListProductsByTaxCategory" type="list" target="" title="" list-name="ProductList"
+        odd-row-style="alternate-row" header-row-style="header-row" default-table-style="basic-table hover-bar"
+        paginate-target="" override-list-size="${overrideListSize}">
+        <field name="productId" title="Product" widget-style="button"><display/></field>
+        <field name="categoryName" title="Category" widget-style="buttontext"><display/></field>
+        <field name=""  title="Remove" widget-style="buttontext">
+            <hyperlink description="Remove" target="removeTax" target-type="inter-app">
+                <parameter param-name="productId" from-field="productId"/>
+                <parameter param-name="productCategoryId" from-field="productCategoryId"/>
+                <parameter param-name="fromDate" from-field="fromDate"/>
+            </hyperlink>
+        </field>       
+       </form>
+       
+    <form name="lookupCustomerNameAndAddress" target="LookupCustomerName" type="single"
+        header-row-style="header-row" default-table-style="basic-table">
+        <field name="contactMechTypeId"><hidden value="POSTAL_ADDRESS"/></field>
+        <field name="partyId" title="${uiLabelMap.PartyPartyId}"><text-find/></field>
+        <field name="firstName" title="${uiLabelMap.PartyFirstName}"><text-find/></field>
+        <field name="lastName"  title="${uiLabelMap.PartyLastName}"><text-find/></field>
+        <field name="paAddress1" title="Address Line 1"><text-find/></field>
+        <field name="paAddress2" title="Address Line 2"><text-find/></field>
+        <field name="paCity" title="City"><text-find/></field>
+        <field name="paStateProvinceGeoId" title="State"><text-find/></field>
+        <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
+        <field name="roleTypeId"><hidden value="CUSTOMER"/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}"><submit button-type="button"/></field>
+    </form>
+    <form name="listLookupCustomerNameAndAddress" type="list" list-name="listIt" paginate-target="LookupCustomerName"
+        odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+        <actions>
+            <set field="inputFields" from-field="parameters"/>
+            <set field="orderBy" value="partyId"/>
+            <set field="entityName" value="PartyRoleAndContactMechDetail"/>
+            <script location="component://party/webapp/partymgr/WEB-INF/actions/party/FindLookUp.groovy"/>
+        </actions>
+        <field name="partyId" title="${uiLabelMap.PartyPartyId}"  widget-style="smallSubmit">
+            <hyperlink also-hidden="false" target-type="plain" description="${partyId}" target="javascript:set_value('${partyId}')"/>
+        </field>
+        <field name="firstName" title="${uiLabelMap.PartyFirstName}"><display/></field>
+        <field name="lastName"  title="${uiLabelMap.PartyLastName}"><display/></field>
+        <field name="paAddress1" title="Address Line 1"><display/></field>
+        <field name="paAddress2" title="Address Line 2"><display/></field>
+        <field name="paCity" title="City"><display/></field>
+        <field name="paStateProvinceGeoId" title="State"><display/></field>
+        <field name="roleTypeId" title="Role"><display/></field>
+    </form>
+
+     
+</forms>

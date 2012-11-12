@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-menu.xsd">
+    <menu name="MainAppBar" title="${uiLabelMap.hwareApplication}"  default-menu-item-name="inventory" id="app-navigation" type="simple" default-selected-style="selected" menu-container-style="button-bar tab-bar" selected-menuitem-context-field-name="headerItem">
+        <menu-item name="main" title="${uiLabelMap.CommonMain}"><link target="main"/></menu-item>
+        <menu-item name="placeSalesOrder" title="Place Sales Order"><link target="placeSalesOrder"/></menu-item>
+    </menu>
+
+    <menu name="OrderAppBar" title="${uiLabelMap.hwareApplication}" default-menu-item-name="inventory" id="app-navigation" type="simple" default-selected-style="selected" menu-container-style="button-bar tab-bar" selected-menuitem-context-field-name="headerItem">
+        <menu-item name="placeSalesOrder" title="Place Sales Order"><link target="placeSalesOrder"/></menu-item>
+        <menu-item name="findOrders" title="Find Order"><link target="findorders"/></menu-item>
+        <menu-item name="requestQuote" title="Create Quote"><link target="requestQuote"/></menu-item>
+        <menu-item name="findQuote" title="Find Quote"><link target="FindQuote"/></menu-item>
+    </menu>
+    
+    <menu name="FacilityAppBar" title="${uiLabelMap.hwareApplication}" default-menu-item-name="inventory" id="app-navigation" type="simple" default-selected-style="selected" menu-container-style="button-bar tab-bar" selected-menuitem-context-field-name="headerItem">
+        <menu-item name="inventory" title="Inventory"><link target="ViewFacilityInventoryByProduct"><parameter param-name="facilityId"/><parameter param-name="action" value="SEARCH"/></link></menu-item>
+        <menu-item name="inventoryItems" title="${uiLabelMap.ProductInventoryItems}"><link target="EditFacilityInventoryItems"><parameter param-name="facilityId"/></link></menu-item>
+        <menu-item name="ShopBasedSummary" title="Shop Based Summary"><link target="ShopBasedSummary"></link></menu-item>
+	</menu>
+    <menu name="CatalogAppBar" title="${uiLabelMap.hwareApplication}" id="app-navigation" type="simple" default-selected-style="selected" menu-container-style="button-bar tab-bar" selected-menuitem-context-field-name="headerItem">
+        <menu-item name="manageProducts" title="Manage Products">
+          <link target="EditCategoryRollup">
+            <parameter param-name="showProductCategoryId" from-field="parameters.topCategoryId"/>
+          </link>
+        </menu-item>
+        <menu-item name="createTaxes" title="Create Taxes">
+        <link target="CreateTaxes">
+        </link>
+        </menu-item>
+    </menu>
+
+    <menu name="PartyAppBar" title="${uiLabelMap.hwareApplication}" id="app-navigation" type="simple" default-selected-style="selected" menu-container-style="button-bar tab-bar" selected-menuitem-context-field-name="headerItem">
+    	<menu-item name="findParty" title="Find Party">
+    		<link target="FindParty"/>
+    	</menu-item>
+    	<menu-item name="createCustomer" title="Create Customer">
+    		<link target="NewCustomer"/>
+    	</menu-item>
+    </menu>
+
+<!-- Overriden from OrderMenus.xml to remove some menu items..-->
+
+    <menu name="QuoteTabBar" extends="CommonTabBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+        <menu-item name="ViewQuote" title="${uiLabelMap.OrderViewQuote}">
+            <link target="ViewQuote">
+                <parameter param-name="quoteId" from-field="quote.quoteId"/>
+            </link>
+        </menu-item>
+
+        <menu-item name="EditQuote" title="${uiLabelMap.OrderOrderQuote}">
+            <link target="EditQuote">
+                <parameter param-name="quoteId" from-field="quote.quoteId"/>
+            </link>
+        </menu-item>
+
+        <menu-item name="ListQuoteItems" title="${uiLabelMap.OrderOrderQuoteItems}">
+            <link target="ListQuoteItems">
+                <parameter param-name="quoteId" from-field="quote.quoteId"/>
+            </link>
+        </menu-item>
+        <menu-item name="ManageQuotePrices" title="${uiLabelMap.OrderOrderQuotePrices}">
+            <condition>
+                <if-has-permission permission="ORDERMGR" action="_QUOTE_PRICE"/>
+            </condition>
+            <link target="ManageQuotePrices">
+                <parameter param-name="quoteId" from-field="quote.quoteId"/>
+            </link>
+        </menu-item>
+
+        <menu-item name="quoteReport" title="${uiLabelMap.CommonReport}">
+            <link target="QuoteReport">
+                <parameter param-name="quoteId" from-field="quote.quoteId"/>
+            </link>
+        </menu-item>
+        <menu-item name="editQuoteReportMail" title="${uiLabelMap.CommonSendReportByMail}">
+            <link target="EditQuoteReportMail">
+                <parameter param-name="quoteId" from-field="quote.quoteId"/>
+                <parameter param-name="emailType" value="PRDS_QUO_CONFIRM"/>
+            </link>
+        </menu-item>
+        <menu-item name="createOrder" title="${uiLabelMap.OrderCreateOrder}">
+            <condition disabled-style="disabled">
+                <and>
+                    <not><if-empty field="quote"/></not>
+                    <if-compare operator="equals" value="QUO_APPROVED" field="quote.statusId"/>
+                </and>
+            </condition>
+            <link target="loadCartFromQuote">
+                <parameter param-name="quoteId" from-field="quote.quoteId"/>
+                <parameter param-name="finalizeMode" value="init"/>
+            </link>
+        </menu-item>
+    </menu>
+ 
+</menus>

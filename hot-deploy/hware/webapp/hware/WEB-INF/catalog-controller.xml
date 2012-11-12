@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
+
+    <include location="component://product/webapp/catalog/WEB-INF/controller.xml" />
+
+    <description>hware-catalog Component Site Configuration File</description>
+
+ <!-- Request Mappings -->
+    <request-map uri="CatalogMain">
+      <security https="true" auth="true"/>
+      <response name="success" type="view" value="EditCategoryRollup"/>
+    </request-map>
+    <request-map uri="EditBrandRollup">
+      <security https="true" auth="true"/>
+      <response name="success" type="view" value="EditBrandRollup"/>
+    </request-map>
+    <request-map uri="newProduct">
+      <security https="true" auth="true"/>
+      <response name="success" type="view" value="newProduct"/>	
+    </request-map>
+    <request-map uri="ViewBrandProducts">
+      <security https="true" auth="true"/>
+      <response name="success" type="view" value="ViewBrandProducts"/>
+    </request-map>
+    <request-map uri="CreateAndAddProductCategory">
+      <security https="true" auth="true"/>
+      <event type="service" invoke="createAndAddNewCategory"/>
+      <response name="success" type="view" value="EditCategoryRollup"/>
+      <response name="error" type="view" value="EditCategoryRollup"/>
+    </request-map>
+    <request-map uri="createProduct">
+      <security https="true" auth="true"/>
+      <event type="service" path="" invoke="createProductInCategory"/>
+      <response name="success" type="view" value="ViewBrandProducts"/>
+      <response name="error" type="view" value="ViewBrandProducts"/>
+    </request-map>
+    <request-map uri="updateProductCategory">
+      <security https="true" auth="true"/>
+      <event type="service" path="" invoke="updateProductCategory"/>
+      <response name="success" type="view" value="EditCategoryRollup"/>
+      <response name="error" type="view" value="EditCategoryRollup"/>
+    </request-map>
+    <request-map uri="removeCategoryProductMember">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="removeProductFromCategory"/>
+        <response name="success" type="view" value="ViewBrandProducts"/>
+        <response name="error" type="view" value="ViewBrandProducts"/>
+    </request-map>
+    <request-map uri="removeCategoryFromCategory">
+      <security https="true" auth="true"/>
+      <event type="service" invoke="removeProductCategoryFromCategory"/>
+      <response name="success" type="view" value="EditCategoryRollup"/>
+      <response name="error" type="view" value="EditCategoryRollup"/>
+    </request-map>
+    <request-map uri="EditBrand">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditBrand"/>
+    </request-map>
+    <request-map uri="CreateAndAddBrand">
+      <security https="true" auth="true"/>
+      <event type="service" invoke="createAndAddNewCategory"/>
+      <response name="success" type="view" value="EditBrandRollup"/>
+      <response name="error" type="view" value="EditBrandRollup"/>
+    </request-map>
+
+    
+    <request-map uri="removeCategoryProductMember">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="removeAndDeleteProduct"/>
+        <response name="success" type="view" value="ViewBrandProducts"/>
+        <response name="error" type="view" value="ViewBrandProducts"/>
+    </request-map>
+    <request-map uri="CreateTaxes">
+      <security https="true" auth="true"/>
+      <response name="success" type="view" value="CreateTaxes"/>
+    </request-map>
+    <request-map uri="EditTaxCategory">
+      <security https="true" auth="true"/>
+      <response name="success" type="view" value="EditTaxCategory"/>
+    </request-map>
+    <request-map uri="createTax">
+      <security https="true" auth="true"/>
+      <event type="service" invoke="createHwareTax"/>
+      <response name="success" type="view" value="CreateTaxes"/>
+      <response name="error" type="view" value="EditTaxCategory"/>
+    </request-map>
+    <request-map uri="EditProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProduct"/>
+    </request-map>
+    <request-map uri="TaxAssoc">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="TaxAssoc"/>
+    </request-map>
+    <request-map uri="ProductTaxAssoc">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="taxAssoc"/>
+        <response name="success" type="view" value="TaxAssoc"/>
+        <response name="error" type="view" value="TaxAssoc"/>
+    </request-map>
+    <request-map uri="removeTax">
+        <security https="false" auth="true"/>
+        <event type="service" invoke="removeTaxCategory"/>
+        <response name="success" type="view" value="TaxAssoc"/>
+        <response name="error" type="view" value="TaxAssoc"/>
+    </request-map>
+
+
+    <!-- View Mappings -->
+    
+    <view-map name="CatalogMain" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#CatalogMain"/>
+    <view-map name="EditCategoryRollup" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#EditCategoryRollup"/>
+    <view-map name="EditBrandRollup" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#EditBrandRollup"/>
+    <view-map name="newProduct" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#newProduct"/>
+	<view-map name="ViewBrandProducts" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#ViewBrandProducts"/>
+    <view-map name="EditCategory" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#EditCategory"/>
+    <view-map name="EditBrand" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#EditBrand"/>
+    <view-map name="CreateTaxes" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#CreateTaxes"/>
+    <view-map name="EditTaxCategory" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#EditTaxCategory"/>
+    <view-map name="EditProduct" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#EditProduct"/>
+    <view-map name="TaxAssoc" type="screen" page="component://hware/widget/catalog/CatalogScreens.xml#TaxAssoc"/>
+    <view-map name="EditProductFacilities" type="screen" page="component://hware/widget/facility/FacilityScreens.xml#EditProductFacilities"/>
+
+</site-conf>

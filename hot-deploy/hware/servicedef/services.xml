@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>hware Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+    <service name="createUpdateCustomerAndShippingAddress" engine="simple" location="component://hware/script/com/softitude/hware/CustomerServices.xml" auth="false" invoke="createUpdateCustomerAndShippingAddress">
+        <implements service="createUpdateShippingAddress"/>
+        <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="IN" optional="false"/>
+        <attribute name="firstName" type="String" mode="IN" optional="false"/>
+        <attribute name="lastName" type="String" mode="IN" optional="false"/>
+        <attribute name="userLogin" type="org.ofbiz.entity.GenericValue" mode="IN" optional="true"/>
+        <attribute name="emailAddress" type="String" mode="IN" optional="false"/>
+        <attribute name="shipToCountryCode" type="String" mode="IN" optional="false"/>
+        <attribute name="shipToAreaCode" type="String" mode="IN" optional="false"/>
+        <attribute name="shipToContactNumber" type="String" mode="IN" optional="true"/>
+   <!-- shipToExtension?? -->
+        
+        <attribute name="shipToAddress1" mode="IN" type="String" optional="false"/>
+        <attribute name="shipToAddress2" mode="IN" type="String" optional="true"/>
+        <attribute name="shipToCity" mode="IN" type="String" optional="false"/>
+        <attribute name="shipToStateProvinceGeoId" mode="IN" type="String" optional="false"/>
+        <attribute name="contactMechId" mode="INOUT" type="String" optional="true"/>
+
+        <attribute name="emailContactMechId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="phoneContactMechId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
+
+        <attribute name="shipToContactMechId" type="String" mode="INOUT" optional="true"/>
+    </service>
+
+    <service name="getPartyContactInfo" engine="simple" location="component://hware/script/com/softitude/hware/CustomerServices.xml" invoke="getPartyContactInfo">
+      <attribute name="partyId" mode="IN" type="String" optional="true"/>
+      <attribute name="firstName" type="String" mode="OUT" optional="true"/>
+      <attribute name="lastName" type="String" mode="OUT" optional="true"/>
+      <attribute name="middleName" type="String" mode="OUT" optional="true"/>
+
+      <attribute name="emailAddress" type="String" mode="OUT" optional="true"/>
+      <attribute name="contactNumber" type="String" mode="OUT" optional="true"/>
+      <attribute name="shipToAddress1" type="String" mode="OUT" optional="true"/>
+      <attribute name="shipToAddress2" type="String" mode="OUT" optional="true"/>
+      <attribute name="shipToCity" type="String" mode="OUT" optional="true"/>
+      <attribute name="shipToPostalCode" type="String" mode="OUT" optional="true"/>
+      <attribute name="stateProvinceGeoId" type="String" mode="OUT" optional="true"/>
+
+      <attribute name="phoneContactMechId" type="String" mode="OUT" optional="true"/>
+      <attribute name="emailContactMechId" type="String" mode="OUT" optional="true"/>
+      <attribute name="shipToContactMechId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="addPriceAdjustment" engine="simple" location="component://hware/script/com/softitude/hware/OrderServices.xml" invoke="addPriceAdjustment" >
+      <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="IN" optional="false"/>
+      <attribute name="orderAdjustmentTypeId" type="String" mode="IN" optional="false"/>
+      <attribute name="description" type="String" mode="IN" optional="true"/>
+      <attribute name="amount" type="String" mode="IN" optional="false"/>
+      <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createAndAddNewCategory" engine="simple" default-entity-name="ProductCategory" location="component://hware/script/com/softitude/hware/CatalogServices.xml" invoke="createAndAddNewCategory">
+      <description>Wrapper Service To Create and Add Product Category</description>
+      <attribute name="categoryName" type="String" mode="IN" optional="true"/>
+      <attribute name="productCategoryId" type="String" mode="IN" optional="false"/>
+      <attribute name="parentProductCategoryId" type="String" mode="IN" optional="false"/>
+      <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
+ 
+      <auto-attributes include="pk" mode="INOUT" optional="true"/>
+      <auto-attributes include="nonpk" mode="IN" optional="true"/>
+      <override name="productCategoryTypeId" optional="false"/>
+    </service>
+    
+    <service name="createQuoteFromCart" engine="simple" auth="true"
+            location="component://hware/script/com/softitude/hware/QuoteServices.xml" invoke="createQuoteFromCart">
+        <description>Creates a new quote from a shopping cart</description>
+        <attribute name="cart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="IN" optional="false"/>
+        <attribute name="applyStorePromotions" type="String" mode="IN" optional="true"/>
+        <attribute name="quoteId" type="String" mode="OUT" optional="false"/>
+    </service>
+    
+    <service name="createPartyCustomer" engine="simple" auth="true" 
+    			location="component://hware/script/com/softitude/hware/PartyServices.xml" invoke="createPartyCustomer">
+    	<description>Creates a new party in form of customer</description>
+    	<attribute name="firstName" type="String" mode="IN" optional="false"/>
+        <attribute name="lastName" type="String" mode="IN" optional="false"/>
+        <attribute name="userLogin" type="org.ofbiz.entity.GenericValue" mode="IN" optional="true"/>
+        <attribute name="emailAddress" type="String" mode="IN" optional="false"/>
+        <attribute name="shipToCountryCode" type="String" mode="IN" optional="false"/>
+        <attribute name="shipToAreaCode" type="String" mode="IN" optional="false"/>
+        <attribute name="shipToContactNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="shipToAddress1" mode="IN" type="String" optional="false"/>
+        <attribute name="shipToAddress2" mode="IN" type="String" optional="true"/>
+        <attribute name="shipToCity" mode="IN" type="String" optional="false"/>
+        <attribute name="shipToStateProvinceGeoId" mode="IN" type="String" optional="false"/>
+        <attribute name="contactMechId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="emailContactMechId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="phoneContactMechId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="shipToContactMechId" type="String" mode="INOUT" optional="true"/>
+    </service>
+    
+    <!-- Overridden getInventoryAvailableByFacility from ootb to make facilityId optional, so that we can get inventory records for all stores -->
+    <service name="getProductInventoryAndFacilitySummary" engine="java"
+                location="org.ofbiz.product.inventory.InventoryServices" invoke="getProductInventoryAndFacilitySummary" auth="false" use-transaction="false">
+        <description>Get ATP/QOH Availability for a list of OrderItems by summing over all facilities.  If the item is a MARKETING_PKG_AUTO/PICK, then put its quantity available from components
+            in the mktgPkgATPMap and mktgPkgQOHMap.</description>
+        <attribute name="checkTime" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="minimumStock" mode="IN" type="String" optional="true"/>
+        <attribute name="statusId" type="String" mode="IN" optional="true"/>
+        <attribute name="totalQuantityOnHand" mode="OUT" type="String" optional="true"/>
+        <attribute name="totalAvailableToPromise" mode="OUT" type="String" optional="true"/>
+        <attribute name="quantityOnOrder" mode="OUT" type="BigDecimal" optional="true"/>
+        <attribute name="offsetQOHQtyAvailable" mode="OUT" type="BigDecimal" optional="true"/>
+        <attribute name="offsetATPQtyAvailable" mode="OUT" type="BigDecimal" optional="true"/>
+        <attribute name="defultPrice" mode="OUT" type="BigDecimal" optional="true"/>
+        <attribute name="listPrice" mode="OUT" type="BigDecimal" optional="true"/>
+        <attribute name="wholeSalePrice" mode="OUT" type="BigDecimal" optional="true"/>
+        <attribute name="usageQuantity" mode="OUT" type="BigDecimal" optional="true"/>
+    </service>
+    
+    <!-- Overridden getInventoryAvailableByFacility from ootb to make facilityId optional, so that we can get inventory records for all stores -->
+     <service name="getInventoryAvailableByFacility" engine="simple"
+                location="component://product/script/org/ofbiz/product/inventory/InventoryServices.xml" invoke="getProductInventoryAvailable" auth="false" use-transaction="false">
+        <description>Get Inventory Availability for a Product constrained by a facilityId</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="true"/>
+        <attribute name="statusId" type="String" mode="IN" optional="true"/>
+        <attribute name="quantityOnHandTotal" type="BigDecimal" mode="OUT" optional="false"/>
+        <attribute name="availableToPromiseTotal" type="BigDecimal" mode="OUT" optional="false"/>
+        <attribute name="useCache" type="Boolean" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="createHwareTax" engine="simple" 
+            location="component://hware/script/com/softitude/hware/CatalogServices.xml" invoke="createHwareTax">
+        <attribute name="categoryName" mode="IN" type="String" optional="false"></attribute>
+        <attribute name="taxPercentage" mode="IN" type="String" optional="false"></attribute>
+    </service>
+
+    <service name="taxAssoc" engine="simple" 
+            location="component://hware/script/com/softitude/hware/CatalogServices.xml" invoke="taxAssoc">
+        <attribute name="productId" mode="IN" type="String" optional="false"></attribute>
+        <attribute name="productCategoryId" mode="IN" type="String" optional="false"></attribute>
+    </service>
+    
+    <service name="removeTaxCategory" engine="simple" 
+            location="component://hware/script/com/softitude/hware/CatalogServices.xml" invoke="removeTaxCategory">
+        <attribute name="productId" mode="IN" type="String" optional="false"></attribute>
+        <attribute name="productCategoryId" mode="IN" type="String" optional="false"></attribute>
+        <attribute name="fromDate" mode="IN" type="String" optional="false"></attribute>
+    </service>
+
+    <service name="HwareCompleteOrder" engine="java" auth="false"
+		use-transaction="false" location="com.softitude.hware.HwareServices"
+		invoke="HwareCompleteOrder">
+		<attribute name="orderId" mode="IN" type="String" optional="true"></attribute>
+		<attribute name="userLogin" type="org.ofbiz.entity.GenericValue"
+			mode="IN" optional="true" />
+	</service>
+</services>

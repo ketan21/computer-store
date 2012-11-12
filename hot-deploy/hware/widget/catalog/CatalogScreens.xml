@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="CatalogMain">
+        <section>
+            <actions>
+                <set field="headerItem" value="CatalogMain"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <entity-one entity-name="Product" value-field="product"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CatalogMainDecorator" location="component://hware/widget/CommonScreens.xml">
+                    <decorator-section name="left-column">
+                        <include-screen name="leftbar" location="component://product/widget/catalog/CommonScreens.xml"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <screenlet title="${uiLabelMap.ProductCatalogAdministrationMainPage}">
+                            <platform-specific>
+                                <html><html-template location="component://product/webapp/catalog/main.ftl"/></html>
+                            </platform-specific>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="CommonBrandDecorator">
+        <section>
+            <widgets>
+                <decorator-screen name="CatalogMainDecorator" location="${parameters.mainDecoratorLocation}">
+                	<decorator-section name="left-column">
+                        <include-screen name="leftbar" location="component://product/widget/catalog/CommonScreens.xml"/>
+                    </decorator-section>
+                    <decorator-section name="pre-body">
+                    	<include-menu name="BrandTabBar" location="component://hware/widget/catalog/CatalogMenus.xml"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                       <section>
+                            <!-- do check for CATALOG, _VIEW permission -->
+                            <widgets>
+                                <decorator-section-include name="body"/>    
+                            </widgets>
+                      </section>      
+                    </decorator-section>
+               </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="newProduct">
+        <section>
+            <actions>
+                <set field="headerItem" value="newProduct"/>
+                <set field="productCategoryId" from-field="parameters.productCategoryId"/>
+                <set field="parentProductCategoryId" from-field="parameters.parentProductCategoryId"/>
+                <entity-one entity-name="ProductCategory" value-field="productCategory"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CatalogMainDecorator" location="${parameters.mainDecoratorLocation}">
+                	<decorator-section name="left-column">
+                        <include-screen name="leftbar" location="component://product/widget/catalog/CommonScreens.xml"/>
+                    </decorator-section>
+                    <decorator-section name="pre-body">
+                    	<include-menu name="ProductTabBar" location="component://hware/widget/catalog/CatalogMenus.xml"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                    	<section>
+                            <!-- do check for CATALOG, _VIEW permission -->
+                            <widgets>
+                                <container style="button-bar">
+                                     <link target="newProduct" text="Add" style="buttontext create">
+                                     	<parameter param-name="productCategoryId"/>
+                                     	<parameter param-name="parentProductCategoryId"/>
+                                     </link> 	
+                                </container>
+                            </widgets>
+                        </section>
+          				<platform-specific>
+                            <html><html-template location="component://hware/webapp/hware/includes/newProduct.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="ViewBrandProducts">
+        <section>
+            <actions>
+                <set field="headerItem" value="ViewBrandProducts"/>
+                <set field="productCategoryId" from-field="parameters.productCategoryId"/>
+                <set field="parentProductCategoryId" from-field="parameters.parentProductCategoryId"/>
+                <set field="showProductCategoryId" from-field="parameters.parentProductCategoryId"/>
+                <script location="component://product/webapp/catalog/WEB-INF/actions/category/EditCategoryProducts.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonBrandDecorator">
+                	<decorator-section name="body">
+                	   <section>
+                	   		<widgets>
+                	   		  <container style="button-bar">
+                                     <link target="newProduct" text="Add" style="buttontext create">
+                                     	<parameter param-name="productCategoryId"/>
+                                     	<parameter param-name="parentProductCategoryId"/>
+                                     </link> 	
+                               </container>
+                	   		</widgets>
+                	   </section>
+                    	<platform-specific>
+                            <html><html-template location="component://hware/webapp/hware/includes/EditCategoryProducts.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+ 
+    <screen name="EditCategoryRollup">
+        <section>
+            <actions>
+                <set field="titleProperty" value="View Product Categories"/>
+                <set field="headerItem" value="category"/>
+                <set field="tabButtonItem" value="EditCategoryRollup"/>
+                <set field="labelTitleProperty" value="ProductRollup"/>
+                <set field="productCategoryId" from-field="parameters.showProductCategoryId"/>
+                <entity-condition entity-name="ProductCategoryRollup" list="parentProductCategoryRollups">
+                    <condition-expr field-name="parentProductCategoryId" from-field="productCategoryId"/>
+                    <order-by field-name="sequenceNum"/>
+                </entity-condition>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonCategoryDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                      <container style="button-bar">
+                        <link target="EditCategory" text="Add ${uiLabelMap.ProductNewCategory}" style="buttontext create">
+                          <parameter param-name="parentProductCategoryId" from-field="productCategoryId"/>
+                        </link>
+                      </container>
+                      <platform-specific>
+                        <html><html-template location="component://hware/webapp/hware/includes/EditCategoryRollup.ftl"/></html>
+                      </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditBrandRollup">
+        <section>
+            <actions>
+                <set field="titleProperty" value="View Brands"/>
+                <set field="headerItem" value="category"/>
+                <set field="tabButtonItem" value="EditCategoryRollup"/>
+                <set field="labelTitleProperty" value="ProductRollup"/>
+                <set field="productCategoryId" from-field="parameters.showProductCategoryId"/>
+                                
+                <entity-condition entity-name="ProductCategoryRollup" list="currentProductCategoryRollups">
+                    <condition-expr field-name="productCategoryId" from-field="productCategoryId"/>
+                    <order-by field-name="sequenceNum"/>
+                </entity-condition>
+                <entity-condition entity-name="ProductCategoryRollup" list="parentProductCategoryRollups">
+                    <condition-expr field-name="parentProductCategoryId" from-field="productCategoryId"/>
+                    <order-by field-name="sequenceNum"/>
+                </entity-condition>
+
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonCategoryDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                      <container style="button-bar">
+                        <link target="EditBrand" text="Add New Brand" style="buttontext create">
+                           <parameter param-name="parentProductCategoryId" from-field="productCategoryId"/>
+                        </link>
+                      </container>
+                      <platform-specific>
+                        <html><html-template location="component://hware/webapp/hware/includes/EditBrandRollup.ftl"/></html>
+                      </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditCategory">
+        <section>
+            <actions>
+                <set field="titleProperty" value="PageTitleEditProductCategories"/>
+                <set field="headerItem" value="category"/>
+                <set field="tabButtonItem" value="EditCategory"/>
+                <set field="labelTitleProperty" value="ProductCategory"/>
+                <set field="parentProductCategoryId" from-field="parameters.parentProductCategoryId"/>
+                <set field="productCategoryId" from-field="parameters.productCategoryId"/>
+                <set field="showProductCategoryId" from-field="parameters.productCategoryId"/>
+                <entity-one entity-name="ProductCategory" value-field="productCategory"/>
+
+                <entity-condition entity-name="ProductCategoryType" list="productCategoryTypes">
+                    <order-by field-name="description"/>
+                </entity-condition>
+
+                <script location="component://product/webapp/catalog/WEB-INF/actions/category/EditCategory.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonCategoryDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                    	<section>
+                    		<condition>
+                        		<not><if-empty field="productCategory"/></not>
+                    		</condition>
+                    		<widgets>
+                    			<container>
+                    			 	<link target="EditCategory" text="Add" style="buttontext create">
+                                  		<parameter param-name="parentProductCategoryId"/>
+                             	 	</link>
+                             	 	<link target="EditBrandRollup" text="Brands" style="buttontext create">
+                             			<parameter param-name="showProductCategoryId"/>
+                             	 	</link>
+                             	</container> 
+                    	    </widgets>
+                    		<fail-widgets>
+                    		    <container style="button-bar">
+                        			 <link target="EditCategory" text="Add" style="buttontext create">
+                                     	<parameter param-name="parentProductCategoryId"/>
+                                     </link>
+                            	</container>
+                            </fail-widgets>
+                		</section>
+                        <platform-specific>
+                            <html><html-template location="component://hware/webapp/hware/includes/EditCategory.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="EditBrand">
+        <section>
+            <actions>
+                <set field="titleProperty" value="PageTitleEditProductCategories"/>
+                <set field="headerItem" value="category"/>
+                <set field="tabButtonItem" value="EditCategory"/>
+                <set field="labelTitleProperty" value="ProductCategory"/>
+                <set field="parentProductCategoryId" from-field="parameters.parentProductCategoryId"/>
+                <set field="productCategoryId" from-field="parameters.productCategoryId"/>
+                <entity-one entity-name="ProductCategory" value-field="productCategory"/>
+
+                <entity-condition entity-name="ProductCategoryType" list="productCategoryTypes">
+                    <order-by field-name="description"/>
+                </entity-condition>
+
+                <script location="component://product/webapp/catalog/WEB-INF/actions/category/EditCategory.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonBrandDecorator">
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                               <container style="button-bar">
+                                     <link target="EditCategoryRollup" text="Add" style="buttontext create">
+                                     	<parameter param-name="productCategoryId"/>
+                                     </link>
+                                     <link target="ViewBrandProducts" text="Products" style="buttontext create">
+                                     	<parameter param-name="productCategoryId"/>
+                                     	<parameter param-name="parentProductCategoryId"/>
+                                     </link>  	
+                                </container>
+                             </widgets>
+                        </section>   
+                        <platform-specific>
+                            <html><html-template location="component://hware/webapp/hware/includes/EditBrand.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="CreateTaxes">
+        <section>
+            <actions>
+                <set field="titleProperty" value="View Tax Categories"/>
+                <set field="headerItem" value="category"/>
+                <set field="tabButtonItem" value="createTaxes"/>
+                <set field="labelTitleProperty" value="ProductRollup"/>
+                <set field="productCategoryId" from-field="parameters.showProductCategoryId"/>
+                <entity-condition entity-name="ProductCategory" list="TaxCategories">
+                    <condition-expr field-name="productCategoryTypeId" value="TAX_CATEGORY"/>
+                </entity-condition>
+                <!-- 
+                <entity-condition entity-name="ProductCategoryRollup" list="parentProductCategoryRollups">
+                    <condition-expr field-name="parentProductCategoryId" from-field="productCategoryId"/>
+                    <order-by field-name="sequenceNum"/>
+                </entity-condition>
+                 -->
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonCategoryDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                      <container style="button-bar">
+                        <link target="EditTaxCategory" text="Add New Tax Category" style="buttontext create">
+                           <parameter param-name="parentProductCategoryId" from-field="productCategoryId"/>
+                        </link>
+                      </container>
+                      <include-form name="ListCategoryByTax" location="component://hware/widget/HwareForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditTaxCategory">
+        <section>
+            <actions>
+                <set field="titleProperty" value="Create Tax"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonCategoryDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html><html-template location="component://hware/webapp/hware/includes/EditTaxCategoryRollup.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="EditProduct">
+        <section>
+            <actions>
+                <set field="titleProperty" value="PageTitleEditProduct"/>
+                <set field="tabButtonItem" value="EditProduct"/>
+                <set field="labelTitleProperty" value="ProductProduct"/>
+
+                <set field="productId" from-field="parameters.productId"/>
+                <entity-one entity-name="Product" value-field="product"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="${uiLabelMap.PageTitleEditProduct}">
+                            <include-form name="EditProduct" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="TaxAssoc">
+        <section>
+            <actions>
+                <set field="titleProperty" value="PageTitleEditProductTaxAssociations"/>
+                <set field="tabButtonItem" value="EditProductTaxAssoc"/>
+                <set field="labelTitleProperty" value="ProductTaxAssociations"/>
+                <set field="categoryId" from-field="parameters.productCategoryId"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <!--<set field="fromDate" from-field="parameters.fromDate"/>
+                --><entity-one entity-name="Product" value-field="product"/>
+                <entity-condition entity-name="ProductCategory" list="TaxCategories">
+                  <condition-expr field-name="productCategoryTypeId" value="TAX_CATEGORY"/>
+                </entity-condition>
+                <entity-condition entity-name="ProductCategoryAndMember" list="ProductList">
+                    <condition-expr field-name="productCategoryTypeId" value="TAX_CATEGORY"/>
+                </entity-condition>  
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <container>
+                            <section>
+                                <widgets>
+                                    <platform-specific>
+                                        <html><html-template location="component://hware/webapp/hware/includes/ProductTaxAssoc.ftl"/></html>
+                                    </platform-specific>
+                                </widgets>
+                            </section>
+                        </container>
+                        <screenlet title="Products Under the Category">
+                            <include-form name="ListProductsByTaxCategory" location="component://hware/widget/HwareForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+</screens>

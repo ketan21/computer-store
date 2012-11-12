@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="addPriceAdjustment" short-description="Adjustments for the final order">
+      <make-value entity-name="OrderAdjustment" value-field="orderAdjustment"/>
+
+      <set field="orderAdjustment.orderAdjustmentTypeId" from-field="parameters.orderAdjustmentTypeId"/>
+      <set field="orderAdjustment.description" from-field="parameters.description"/>
+      <set field="orderAdjustment.amount" from-field="parameters.amount" type="BigDecimal"/>
+      <set field="orderAdjustment.shipGroupSeqId" from-field="parameters.shipGroupSeqId"/>
+      <set field="shoppingCart" from-field="parameters.shoppingCart"/>
+
+      <call-object-method method-name="addAdjustment" obj-field="shoppingCart">
+        <field field="orderAdjustment" type="GenericValue"/>
+      </call-object-method>
+
+      <create-object class-name="org.ofbiz.order.shoppingcart.CheckOutHelper" field="checkOutHelper">
+        <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+        <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+        <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+      </create-object>
+    </simple-method>
+</simple-methods>

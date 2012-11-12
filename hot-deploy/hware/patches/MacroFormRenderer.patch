@@ -1,0 +1,44 @@
+Index: framework/widget/src/org/ofbiz/widget/form/MacroFormRenderer.java
+===================================================================
+--- framework/widget/src/org/ofbiz/widget/form/MacroFormRenderer.java	(revision 1148274)
++++ framework/widget/src/org/ofbiz/widget/form/MacroFormRenderer.java	(working copy)
+@@ -1952,14 +1952,14 @@
+             } else {
+                 autoCompleterTarget = lookupFieldFormName + "&amp;amp;";
+             }
+-            autoCompleterTarget = autoCompleterTarget + "ajaxLookup=Y&amp;amp;searchValueField=" + lookupField.getModelFormField().getParameterName(context);
+-            updateAreas = FastList.newInstance();
+-            updateAreas.add(new ModelForm.UpdateArea("change", id, autoCompleterTarget));
+-        }
+-
+-        boolean ajaxEnabled = updateAreas != null && this.javaScriptEnabled;
+-        String autocomplete = "";
+-        if (!lookupField.getClientAutocompleteField() || ajaxEnabled) {
++                        autoCompleterTarget = autoCompleterTarget + "ajaxLookup=Y";
++                         updateAreas = FastList.newInstance();
++                         updateAreas.add(new ModelForm.UpdateArea("change", id, autoCompleterTarget));
++                     }
++             
++                     boolean ajaxEnabled = updateAreas != null && this.javaScriptEnabled;
++                     String autocomplete = "";
++                    if (!lookupField.getClientAutocompleteField() || !ajaxEnabled) {
+             autocomplete = "off";
+         }
+ 
+@@ -2016,6 +2016,7 @@
+         if (UtilValidate.isEmpty(fadeBackground)){
+             fadeBackground = "false";
+         }
++        Boolean isInitiallyCollapsed = lookupField.getInitiallyCollapsed();
+         
+         String clearText = "";
+         Map<String, Object> uiLabelMap = UtilGenerics.checkMap(context.get("uiLabelMap"));        
+@@ -2084,6 +2085,8 @@
+         sr.append(clearText);
+         sr.append("\" showDescription=\"");
+         sr.append(Boolean.toString(showDescription));
++        sr.append("\" initiallyCollapsed=\"");
++        sr.append(Boolean.toString(isInitiallyCollapsed));
+         sr.append("\" />");
+         executeMacro(writer, sr.toString());
+ 

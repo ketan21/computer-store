@@ -1,0 +1,28 @@
+<entity-engine-xml>
+	
+	<PortletCategory portletCategoryId="ORDERMGR" description="List of order(s)"/>
+	
+	<!-- List Todays Order -->
+    <PortalPortlet portalPortletId="ListSalesOrders"
+        portletName="List Sales Orders By Date"
+        screenName="ListSalesOrders"
+        screenLocation="component://hware/widget/order/OrderScreens.xml"
+        description="List Sales Orders placed today" securityServiceName="portalPermissionIsEmployee" securityMainAction="VIEW"/>
+    <PortletPortletCategory portalPortletId="ListSalesOrders" portletCategoryId="ORDERMGR"/>
+
+    <PortletCategory portletCategoryId="PRODUCTS" description="List of Products"/>
+    
+    <PortalPortlet portalPortletId="BestSellingProducts"
+        portletName="List of Days Best Selling Products"
+        screenName="BestSellingProducts"
+        screenLocation="component://product/widget/catalog/ProductScreens.xml"
+        description="List of best selling products of the day"/>
+    <PortletPortletCategory portalPortletId="BestSellingProducts" portletCategoryId="PRODUCTS"/>
+
+    <PortalPage portalPageId="OrderPortalPage" sequenceNum="0" portalPageName="Order Portal Page" description="Order main page using flexible Portal technology" ownerUserLoginId="_NA_"/>
+    <PortalPageColumn portalPageId="OrderPortalPage" columnSeqId="00001"/>
+    <PortalPageColumn portalPageId="OrderPortalPage" columnSeqId="00002"/>
+
+	<PortalPagePortlet portalPageId="OrderPortalPage" portalPortletId="ListSalesOrders" portletSeqId="00001" columnSeqId="00001" sequenceNum="0"/>
+	<PortalPagePortlet portalPageId="OrderPortalPage" portalPortletId="BestSellingProducts" portletSeqId="00001" columnSeqId="00001" sequenceNum="1"/>
+</entity-engine-xml>

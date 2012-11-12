@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <!-- ================================================================ -->
+    <!-- Quote Services -->
+    <!-- ================================================================ -->
+
+    <simple-method method-name="createQuoteFromCart" short-description="Create a Quote from a Cart">
+        <call-object-method obj-field="parameters.cart" method-name="getPartyId" ret-field="createQuoteInMap.partyId"/>
+        <if>
+            <condition>
+                <and>
+                    <not><if-empty field="createQuoteInMap.partyId"/></not>
+                    <not><if-compare-field field="createQuoteInMap.partyId" to-field="userLogin.partyId" operator="equals"/></not>
+                    <not><if-has-permission permission="ORDERMGR" action="_CREATE"/></not>
+                </and>
+            </condition>
+            <then>
+                <add-error><fail-property resource="OrderErrorUiLabels" property="OrderSecurityErrorToRunCreateQuoteFromCart"/></add-error>
+            </then>
+        </if>
+        <check-errors/>
+        <call-object-method obj-field="parameters.cart" method-name="getCurrency" ret-field="createQuoteInMap.currencyUomId"/>
+        <call-object-method obj-field="parameters.cart" method-name="getChannelType" ret-field="createQuoteInMap.salesChannelEnumId"/>
+        
+        <call-object-method obj-field="parameters.cart" method-name="getOrderType" ret-field="orderType"/>
+         <if-compare field="orderType" operator="equals" value="SALES_ORDER"> 
+            <call-object-method obj-field="parameters.cart" method-name="getProductStoreId" ret-field="createQuoteInMap.productStoreId"/>
+            <set field="createQuoteInMap.quoteTypeId" value="PRODUCT_QUOTE"/>     
+         </if-compare>
+         <if-compare field="orderType" operator="equals" value="PURCHASE_ORDER"> 
+             <set field="createQuoteInMap.quoteTypeId" value="PURCHASE_QUOTE" />                          
+         </if-compare>
+        
+        <set value="QUO_APPROVED" field="createQuoteInMap.statusId"/>
+           <now-timestamp field="nowTimestamp"/>
+        <set field="createQuoteInMap.issueDate" default-value="${nowTimestamp}" type="Timestamp"/>
+
+        <call-service service-name="createQuote" in-map-name="createQuoteInMap">
+            <result-to-field result-name="quoteId" field="quoteId"/>
+        </call-service>
+        <entity-one entity-name="Quote" value-field="quote" auto-field-map="true"/>
+
+        <!-- create, for every cart item, a quote item -->
+        <call-object-method obj-field="parameters.cart" method-name="items" ret-field="items"/>
+        <iterate list="items" entry="item">
+            <!-- a new quote item is created -->
+            <clear-field field="createQuoteItemInMap"/>
+            <call-object-method obj-field="item" method-name="getIsPromo" ret-field="isPromo"/>
+            <if-compare field="isPromo" value="true" operator="equals" type="Boolean">
+                <set value="Y" field="createQuoteItemInMap.isPromo"/>
+            </if-compare>
+            <call-object-method obj-field="item" method-name="getConfigWrapper" ret-field="configWrapper"/>
+            <if-not-empty field="configWrapper">
+                <call-object-method obj-field="configWrapper" method-name="getConfigId" ret-field="configId"/>
+                <set from-field="configId" field="createQuoteItemInMap.configId"/>
+            </if-not-empty>
+            <if>
+                <condition>
+                    <or>
+                        <if-compare field="parameters.applyStorePromotions" value="N" operator="not-equals" type="String"/>
+                        <if-compare field="createQuoteItemInMap.isPromo" value="Y" operator="not-equals" type="String"/>
+                    </or>
+                </condition>
+                <then>
+                    <set from-field="quote.quoteId" field="createQuoteItemInMap.quoteId"/>
+                    <call-object-method obj-field="item" method-name="getProductId" ret-field="createQuoteItemInMap.productId"/>
+                    <call-object-method obj-field="item" method-name="getQuantity" ret-field="createQuoteItemInMap.quantity"/>
+                    <call-object-method obj-field="item" method-name="getSelectedAmount" ret-field="createQuoteItemInMap.selectedAmount"/>
+                    <call-object-method obj-field="item" method-name="getBasePrice" ret-field="createQuoteItemInMap.quoteUnitPrice"/>
+                    <call-object-method obj-field="item" method-name="getItemComment" ret-field="createQuoteItemInMap.comments"/>
+                    <call-object-method obj-field="item" method-name="getReservStart" ret-field="createQuoteItemInMap.reservStart"/>
+                    <call-object-method obj-field="item" method-name="getReservLength" ret-field="createQuoteItemInMap.reservLength"/>
+                    <call-object-method obj-field="item" method-name="getReservPersons" ret-field="createQuoteItemInMap.reservPersons"/>
+
+                    <call-service service-name="createQuoteItem" in-map-name="createQuoteItemInMap">
+                        <result-to-field result-name="quoteItemSeqId" field="quoteItemSeqId"/>
+                    </call-service>
+                    <!-- and the quoteItemSeqId is assigned to the shopping cart item (as orderItemSeqId) -->
+                    <call-object-method obj-field="item" method-name="setOrderItemSeqId">
+                        <field field="quoteItemSeqId" type="String"/>
+                    </call-object-method>
+                </then>
+            </if>
+        </iterate>
+
+        <if>
+            <condition>
+                <if-compare field="parameters.applyStorePromotions" value="N" operator="not-equals" type="String"/>
+            </condition>
+            <then>
+                <call-object-method obj-field="parameters.cart" method-name="makeAllQuoteAdjustments" ret-field="adjustments"/>
+                <iterate list="adjustments" entry="adjustment">
+                    <set from-field="quote.quoteId" field="adjustment.quoteId"/>
+                    <sequenced-id sequence-name="QuoteAdjustment" field="adjustment.quoteAdjustmentId"/>
+                    <create-value value-field="adjustment"/>
+                </iterate>
+            </then>
+        </if>
+
+        <field-to-result field="quote.quoteId" result-name="quoteId"/>
+    </simple-method>
+
+</simple-methods>

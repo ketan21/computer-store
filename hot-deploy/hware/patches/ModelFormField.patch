@@ -1,0 +1,34 @@
+Index: framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
+===================================================================
+--- framework/widget/src/org/ofbiz/widget/form/ModelFormField.java	(revision 1148274)
++++ framework/widget/src/org/ofbiz/widget/form/ModelFormField.java	(working copy)
+@@ -3570,6 +3570,7 @@
+         protected String lookupHeight;
+         protected String lookupPosition;
+         protected String fadeBackground;
++        protected String initiallyCollapsed;
+ 
+         public LookupField(Element element, ModelFormField modelFormField) {
+             super(element, modelFormField);
+@@ -3581,7 +3582,7 @@
+             this.lookupWidth = element.getAttribute("width");
+             this.lookupPosition = element.getAttribute("position");
+             this.fadeBackground = element.getAttribute("fade-background");
+-
++            this.initiallyCollapsed = element.getAttribute("initially-collapsed");
+             Element subHyperlinkElement = UtilXml.firstChildElement(element, "sub-hyperlink");
+             if (subHyperlinkElement != null) {
+                 this.subHyperlink = new SubHyperlink(subHyperlinkElement, this.getModelFormField());
+@@ -3668,8 +3669,11 @@
+         public void setFadeBackground(String str) {
+             this.fadeBackground = str;
+         }
++            //initially-collapsed status
++        public boolean getInitiallyCollapsed() {
++            return "true".equals(this.initiallyCollapsed);
++        }
+     }
+-
+     public static class FileField extends TextField {
+ 
+         public FileField(Element element, ModelFormField modelFormField) {

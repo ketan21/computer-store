@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
+     <!-- The controller elements that are common to all OFBiz components
+          can be found in the following xml file. A component can override the
+          elements found in the common-controller.xml file. -->
+     <include location="component://product/webapp/facility/WEB-INF/controller.xml" />
+
+     <description>hware-facility Component Site Configuration File</description>
+     <owner></owner>
+
+     <!-- Request Mappings -->
+
+     <request-map uri="FacilityMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ViewFacilityInventoryByProduct"/>
+     </request-map>
+
+     <request-map uri="TransferInventoryItem">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="TransferInventoryItem"/>
+     </request-map>
+
+     <request-map uri="EditFaciilityInventoryItems">
+     	<security https="true" auth="true"/>
+        <response name="success" type="view" value="EditFacilityInventoryItems"/>
+     </request-map>
+     
+     <request-map uri="ShopBasedSummary">
+     	<security https="true" auth="true"/>
+        <response name="success" type="view" value="ShopBasedSummary"/>
+     </request-map>
+
+     
+     <!-- View Mappings -->
+     <view-map name="FacilityMain" type="screen" page="component://hware/widget/HwareScreens.xml#FacilityMain"/>
+     <view-map name="TransferInventoryItem" type="screen" page="component://hware/widget/facility/FacilityScreens.xml#TransferInventoryItem"/>
+     <view-map name="ViewFacilityInventoryByProduct" type="screen" page="component://hware/widget/facility/FacilityScreens.xml#ViewFacilityInventoryByProduct"/>
+     <view-map name="EditFacilityInventoryItems" type ="screen" page="component://hware/widget/facility/FacilityScreens.xml#EditFacilityInventoryItems"/>
+     <view-map name="ShopBasedSummary" type ="screen" page="component://hware/widget/HwareScreens.xml#ChooseProductStore"/>
+     <view-map name="ReceiveInventory" type ="screen" page="component://hware/widget/facility/FacilityScreens.xml#ReceiveInventory"/>
+</site-conf>

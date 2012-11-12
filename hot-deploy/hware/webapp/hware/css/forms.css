@@ -1,0 +1,15 @@
+form.simpleForm fieldset div label, form.simpleForm fieldset div label.label {
+    display: block;
+    width: 30%;
+    float: left;
+    font-weight:bold;
+    text-align: right;
+    vertical-align: middle;
+    padding: 5px 1.1em 2px 0;
+    height: auto;
+}
+
+
+form.simpleForm fieldset div input[type="submit"] {
+    margin-left: 31%;
+}

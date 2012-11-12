@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<entity-engine-xml>
+
+<ProductStore productStoreId="2010" storeName="OFBiz E-Commerce Store" companyName="Open For Business" title="Open For Commerce"
+        subtitle="Part of the Open For Business Family of Open Source Software" payToPartyId="Company" daysToCancelNonPay="30" prorateShipping="Y" prorateTaxes="Y"
+        inventoryFacilityId="WebStoreWarehouse" oneInventoryFacility="Y" checkInventory="Y" reserveInventory="Y" balanceResOnOrderCreation="Y" reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="N"
+        defaultLocaleString="en_US" defaultCurrencyUomId="USD" defaultSalesChannelEnumId="WEB_SALES_CHANNEL" allowPassword="Y" explodeOrderItems="N" retryFailedAuths="Y" reqReturnInventoryReceive="N"
+        headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED" digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
+        itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED" itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="WS"
+        authDeclinedMessage="There has been a problem with your method of payment. Please try a different method or call customer service."
+        authFraudMessage="Your order has been rejected and your account has been disabled due to fraud."
+        authErrorMessage="Problem connecting to payment processor; we will continue to retry and notify you by email."
+        storeCreditValidDays="90" storeCreditAccountEnumId="FIN_ACCOUNT"
+        visualThemeId="EC_DEFAULT" prodSearchExcludeVariants="Y" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y" showOutOfStockProducts="Y"/>
+        
+     <WebSite webSiteId="WebStore" siteName="eCommerce Web Site" productStoreId="2010" visualThemeSetId="ECOMMERCE"/>
+     <ProdCatalog prodCatalogId="MyCatalog" catalogName="My Catalog" useQuickAdd="Y"/>
+     <ProductStoreCatalog productStoreId="2010" prodCatalogId="MyCatalog" fromDate="2001-05-13 12:00:00.0" sequenceNum="1"/>
+     <ProductStoreCatalog productStoreId="2010" prodCatalogId="MyCatalog1" fromDate="2001-05-13 12:00:00.0" sequenceNum="2"/>
+     <ProductCategory categoryName="MyCatalog Browse Root"
+        longDescription="Test Catalog Primary Browse Root Category" productCategoryId="CATALOG1" productCategoryTypeId="CATALOG_CATEGORY"/>
+     <ProductCategory longDescription="watches"
+        primaryParentCategoryId="CATALOG1" productCategoryId="100" productCategoryTypeId="CATALOG_CATEGORY"/>
+     <ProductCategory longDescription="electronics"
+        primaryParentCategoryId="CATALOG1" productCategoryId="200" productCategoryTypeId="CATALOG_CATEGORY"/>
+     <ProductCategory longDescription="small"
+        primaryParentCategoryId="100" productCategoryId="101" productCategoryTypeId="CATALOG_CATEGORY"/>
+     <ProductCategory longDescription="large"
+        primaryParentCategoryId="100" productCategoryId="102" productCategoryTypeId="CATALOG_CATEGORY"/>
+     <Product productId="GZ-1000" productTypeId="FINISHED_GOOD" primaryProductCategoryId="100" productName="Tiny Gizmo" internalName="Tiny Gizmo" description="The smallest gizmo in town." longDescription="This gizmo is very small and runs on solar power." taxable="Y" chargeShipping="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N" createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+     <Product productId="GZ-1001" productTypeId="FINISHED_GOOD" primaryProductCategoryId="200" productName="Nan Gizmo" internalName="Nan Gizmo" description="Indian style Nan gizmo" taxable="Y" chargeShipping="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N" createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+     <Product productId="GZ-1004" productTypeId="FINISHED_GOOD" primaryProductCategoryId="101" productName="Rainbow Gizmo" internalName="Rainbow Gizmo" description="The only multi-colored gizmo" longDescription="This is the original multi-colored gizmo, only available from OFBiz!" taxable="Y" chargeShipping="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N" createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+     <Product productId="GZ-1005" productTypeId="FINISHED_GOOD" primaryProductCategoryId="102" productName=".NIT Gizmo" internalName=".NIT Gizmo" description="M$ .NIT gizmo" taxable="Y" chargeShipping="Y" autoCreateKeywords="Y" isVirtual="N" isVariant="N" createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin">
+        <longDescription><![CDATA[This gizmo only works in certain areas and requires a lot of extra space to move around.<br/><br/>It is not recommended for mission critical applications or those with a low tolerance for pain and frustration.]]></longDescription>
+     </Product>
+      <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="CATALOG1" productCategoryId="200"/>
+      <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="CATALOG1" productCategoryId="200"/>
+      <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="100" productCategoryId="101"/>
+      <ProductCategoryRollup fromDate="2001-05-13 12:00:00.0" parentProductCategoryId="100" productCategoryId="102"/>
+      <ProductCategoryMember productCategoryId="100" productId="GZ-1000" sequenceNum="22" fromDate="2001-05-13 12:00:00.0"/>
+      <ProductCategoryMember productCategoryId="200" productId="GZ-1001" sequenceNum="26" fromDate="2001-05-13 12:00:00.0"/>
+      <ProductCategoryMember productCategoryId="101" productId="GZ-1004" sequenceNum="55" fromDate="2001-05-13 12:00:00.0"/>
+      <ProductCategoryMember productCategoryId="102" productId="GZ-1005" sequenceNum="70" fromDate="2001-05-13 12:00:00.0"/>
+      </entity-engine-xml>
+  

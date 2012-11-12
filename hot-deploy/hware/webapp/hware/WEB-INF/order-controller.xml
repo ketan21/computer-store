@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
+     <!-- The controller elements that are common to all OFBiz components
+          can be found in the following xml file. A component can override the
+          elements found in the common-controller.xml file. -->
+     <include location="component://order/webapp/ordermgr/WEB-INF/controller.xml" />
+     
+     <description>hware-order Component Site Configuration File</description>
+     <owner></owner>
+     
+     <!-- Events to run on every request before security (chains exempt) -->
+
+    
+
+     <!-- Request Mappings -->
+     <request-map uri="OrderMain">
+          <security https="true" auth="true" />
+          <response name="success" type="view" value="OrderMain" />
+     </request-map>
+     <request-map uri="authview" >
+          <security https="true" auth="true" />
+          <response name="success" type="view" value="OrderMain" />
+     </request-map>
+     <request-map uri="SelectProductStore" >
+        <security https="true" auth="true" />
+        <response name="success" type="view" value="selectProductStore" />
+     </request-map>
+     <request-map uri="ChangeProductStore" >
+        <security https="true" auth="true" />
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="clearCart"/>
+        <response name="success" type="view" value="selectProductStore" />
+     </request-map>
+     <request-map uri="setProductStore" >
+        <security https="true" auth="true" />
+        <event name="setProductStore" type="java" path="com.softitude.hware.CommonEvents" invoke="setProductStore" />
+        <response name="success" type="view" value="OrderMain" />
+        <response name="error" type="view" value="selectProductStore" />
+     </request-map>
+     <request-map uri="placeSalesOrder">
+        <security https="true" auth="true" />
+        <event type="java" path="com.softitude.hware.HwareShoppingCartEvents" invoke="initializeOrder"/>
+        <response name="success" type="view" value="ShowCart"/>
+     </request-map>
+    <request-map uri="additem">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="view" value="ShowCart"/>
+        <response name="error" type="view" value="ShowCart"/>
+    </request-map>
+     <request-map uri="findorders">
+       <security https="true" auth="true"/>
+        <response name="success" type="view" value="findorders"/>
+    </request-map>
+    <request-map uri="modifycart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="modifyCart"/>
+        <response name="success" type="view" value="ShowCart"/>
+        <response name="error" type="view" value="ShowCart"/>
+    </request-map>
+    <request-map uri="emptycart">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.softitude.hware.HwareShoppingCartEvents" invoke="destroyCart"/>
+        <response name="success" type="view" value="ShowCart"/>
+        <response name="error" type="view" value="ShowCart"/>
+    </request-map>
+    <request-map uri="setCustomer">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="customerSetting"/>
+    </request-map>
+<!-- Overriden OOTB request-->
+    <request-map uri="clearcart">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.softitude.hware.HwareShoppingCartEvents" invoke="destroyCart"/>
+        <response name="success" type="request" value="emailorder"/>
+        <response name="error" type="view" value="confirm"/>
+    </request-map>
+
+    <request-map uri="createCustomerAndPostalAddress">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createUpdateCustomerAndShippingAddress"/>
+        <response name="success" type="request" value="finalizeOrder"></response>
+        <response name="error" type="view" value="customerSetting"/>
+    </request-map>
+    
+    <request-map uri="calcTax">
+        <security direct-request="false"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="calcTax"/>
+        <response name="success" type="view" value="confirmOrder"/>
+        <response name="error" type="request" value="customerSetting"/>
+    </request-map>
+    <request-map uri="getPartyContactinfo">
+        <event type="service" invoke="getPartyContactInfo"/>
+        <response name="success" type="request" value="json"></response>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+    <request-map uri="addPriceAdjustment">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="addPriceAdjustment"/>
+        <response name="success" type="view" value="confirmOrder"/>
+        <response name="error" type="view" value="confirmOrder"/>
+    </request-map>
+    
+    <request-map uri="orderview">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="orderview"/>
+    </request-map>
+
+    <request-map uri="LookupCustomerName"><security auth="true" https="true"/><response name="success" type="view" value="LookupCustomerName"/></request-map>
+    <request-map uri="LookupProduct"><security auth="true" https="true"/><response name="success" type="view" value="LookupProduct"/></request-map>
+
+    <request-map uri="requestQuote">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="requestQuote"/>
+    </request-map>
+    <request-map uri="BulkAddProducts">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="bulkAddProducts"/>
+        <response name="success" type="view" value="requestQuote"/>
+        <response name="error" type="view" value="requestQuote"/>
+    </request-map>
+    <request-map uri="emptyquote">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.softitude.hware.HwareShoppingCartEvents" invoke="destroyCart"/>
+        <response name="success" type="view" value="requestQuote"/>
+        <response name="error" type="view" value="requestQuote"/>
+    </request-map>
+    <request-map uri="modifyquote">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="modifyCart"/>
+        <response name="success" type="view" value="requestQuote"/>
+        <response name="error" type="view" value="requestQuote"/>
+    </request-map>
+    <request-map uri="loadCartFromQuote">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="loadCartFromQuote"/>
+        <response name="success" type="request" value="finalizeOrder"/>
+        <response name="error" type="view" value="EditQuote"/>
+    </request-map>
+    <request-map uri="setCustomerForQuote">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="customerSettingForQuote"/>
+    </request-map>
+    <request-map uri="addCustomerToQuote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createUpdateCustomerAndShippingAddress"/>
+        <response name="success" type="request" value="createQuoteFromCart"></response>
+        <response name="error" type="view" value="requestQuote"/>
+    </request-map>
+    <request-map uri="createQuoteFromCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.softitude.hware.HwareShoppingCartEvents" invoke="createQuoteFromCart"/>
+        <response name="success" type="request" value="ViewQuote"/>
+        <response name="error" type="request" value="requestQuote"/>
+    </request-map>
+    <request-map uri="LookupBulkAddProducts">
+   	    <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupBulkAddProducts"/>
+    </request-map>
+    <request-map uri="FindQuote">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindQuote"/>
+    </request-map>
+    <request-map uri="createQuoteItem">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createQuoteItem"/>
+        <response name="success" type="view" value="ListQuoteItems"/>
+    </request-map>
+
+    <request-map uri="updateQuoteItem">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateQuoteItem"/>
+        <response name="success" type="view" value="ListQuoteItems"/>
+    </request-map>
+    
+    <request-map uri="orderentry">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="routeOrderEntry"/>
+        <response name="cart" type="view" value="ShowCart"/>
+        <response name="error" type="view" value="checkinits"/>
+    </request-map>
+    
+    <request-map uri="finalizeOrder">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.softitude.hware.HwareShoppingCartEvents" invoke="determineNextStep"/>
+        <response name="customer" type="request" value="setCustomer"/>
+        <response name="payment" type="request" value="calcShippingBeforePayment"/>
+        <response name="paymentFinal" type="request" value="calcShippingBeforePayment"/>
+        <response name="error" type="request" value="orderentry"/>
+        <response name="sales" type="request" value="calcTax"/>
+    </request-map>
+    
+    <request-map uri="invoice.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="InvoicePDF"/>
+    </request-map>
+    
+	<request-map uri="completeOrder">
+		<security https="true" auth="false" />
+		<event type="service" path="com.softitude.hware.HwareServices"
+			invoke="HwareCompleteOrder" />
+		<response name="success" type="view" value="ordercomplete" />
+		<response name="error" type="view" value="ordercomplete" />
+	</request-map>
+
+
+    <!-- View Mappings -->
+     <view-map name="OrderMain" type="screen" page="component://hware/widget/HwareScreens.xml#OrderMain" />
+     <view-map name="selectProductStore" type="screen" page="component://hware/widget/HwareScreens.xml#selectProductStore" />
+     <view-map name="ShowCart" type="screen" page="component://hware/widget/order/OrderScreens.xml#ShowCart" />
+     <view-map name="customerSetting" type="screen" page="component://hware/widget/order/OrderScreens.xml#customerSettings" />
+     <view-map name="confirmOrder" type="screen" page="component://hware/widget/order/OrderScreens.xml#ConfirmOrder" />
+     <view-map name="ordercomplete" type="screen" page="component://hware/widget/order/OrderScreens.xml#OrderHeaderView"/>
+     <view-map name="LookupCustomerName" type="screen" page="component://party/widget/partymgr/LookupScreens.xml#LookupCustomerName"/>
+     <view-map name="findorders" type="screen" page="component://hware/widget/order/OrderScreens.xml#FindOrder" />
+     <view-map name="orderview" type="screen" page="component://hware/widget/order/OrderScreens.xml#OrderHeaderView"/>
+     <view-map name="requestQuote" type="screen" page="component://hware/widget/order/OrderScreens.xml#RequestQuote"/>
+     <view-map name="LookupProduct" type="screen" page="component://product/widget/catalog/LookupScreens.xml#LookupProduct"/>
+     <view-map name="LookupBulkAddProducts" type="screen" page="component://order/widget/ordermgr/OrderEntryCartScreens.xml#LookupBulkAddProducts"/>
+     <view-map name="customerSettingForQuote" type="screen" page="component://hware/widget/order/OrderScreens.xml#CustomerSettingsForQuote" />
+     <view-map name="ViewQuote" type="screen" page="component://hware/widget/order/OrderScreens.xml#ViewQuote"/>
+     <view-map name="LookupBulkAddProducts" type="screen" page="component://hware/widget/order/OrderScreens.xml#LookupBulkAddProducts"/>
+     <view-map name="FindQuote" type="screen" page="component://hware/widget/order/OrderScreens.xml#FindQuote"/>
+     <view-map name="EditQuoteAdjustment" type="screen" page="component://hware/widget/order/OrderScreens.xml#EditQuoteAdjustment"/>
+     <view-map name="ListQuoteAdjustments" type="screen" page="component://hware/widget/order/OrderScreens.xml#ListQuoteAdjustments"/>
+     <view-map name="EditQuote" type="screen" page="component://hware/widget/order/OrderScreens.xml#EditQuote"/>
+     <view-map name="ListQuoteItems" type="screen" page="component://hware/widget/order/OrderScreens.xml#ListQuoteItems"/>
+     <view-map name="ManageQuotePrices" type="screen" page="component://hware/widget/order/OrderScreens.xml#ManageQuotePrices"/>
+     <view-map name="EditQuoteItem" type="screen" page="component://hware/widget/order/OrderScreens.xml#EditQuoteItem"/>
+     <view-map name="billsetting" type="screen" page="component://hware/widget/order/OrderScreens.xml#BillSettings"/>
+     <view-map name="InvoicePDF" type="screenfop" page="component://hware/widget/order/OrderScreens.xml#InvoicePDF" content-type="application/pdf" encoding="none"/>
+     <view-map name="QuoteReport" type="screenfop" page="component://hware/widget/order/OrderScreens.xml#QuoteReport" content-type="application/pdf" encoding="none"/>
+     <view-map name="receivepayment" type="screen" page="component://hware/widget/order/OrderScreens.xml#OrderReceivePayment" />
+</site-conf>

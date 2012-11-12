@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="createUpdateCustomerAndShippingAddress" short-description="Create/Update Customer, Shipping Address and other contact details." login-required="false">
+        
+        <set field="emailContactMechId" from-field="parameters.emailContactMechId"/>
+        <set field="contactMechId" from-field="parameters.phoneContactMechId"/>
+        <set field="shipToContactMechId" from-field="parameters.shipToContactMechId"/>
+
+        <call-map-processor xml-resource="component://order/script/org/ofbiz/order/customer/CheckoutMapProcs.xml"
+                processor-name="shipToPhone" in-map-name="parameters" out-map-name="shipToPhoneCtx"/>
+        <call-map-processor xml-resource="component://party/script/org/ofbiz/party/contact/PartyContactMechMapProcs.xml"
+                processor-name="emailAddress" in-map-name="parameters" out-map-name="emailAddressCtx"/>
+        <check-errors/>
+        <set field="shoppingCart" from-field="parameters.shoppingCart"/>
+        <set field="partyId" from-field="parameters.partyId"/>
+        <call-object-method obj-field="shoppingCart" method-name="getUserLogin" ret-field="userLogin"/>
+
+        <set-service-fields service-name="createUpdatePerson" map="parameters" to-map="createUpdatePersonCtx"/>
+        <set field="createUpdatePersonCtx.userLogin" from-field="userLogin"/>
+        <set field="createUpdatePersonCtx.partyId" from-field="partyId"/>
+        <call-service service-name="createUpdatePerson" in-map-name="createUpdatePersonCtx">
+            <result-to-field result-name="partyId"/>
+        </call-service>
+       <set field="parameters.partyId" from-field="partyId"/>
+        <if-not-empty field="userLogin">
+            <if-compare field="userLogin.userLoginId" operator="equals" value="anonymous">
+                <set field="userLogin.partyId" from-field="partyId"/>
+            </if-compare>
+        </if-not-empty>
+
+        <set field="partyRoleCtx.partyId" from-field="partyId"/>
+        <set field="partyRoleCtx.roleTypeId" value="CUSTOMER"/>
+        <set field="partyRoleCtx.userLogin" from-field="userLogin"/>
+
+        <call-service service-name="createPartyRole" in-map-name="partyRoleCtx"/>
+
+          <set field="shipToAddress1" from-field="address1"/>
+
+        <!-- Create Update Shipping address -->
+        <set-service-fields service-name="createUpdateShippingAddress" map="parameters" to-map="shipToAddressCtx"/>
+        <log level="info" message="=========== Shipping address :  ==========${shipToAddressCtx}============"/>
+        <set field="shipToAddressCtx.userLogin" from-field="userLogin"/>
+        <call-service service-name="createUpdateShippingAddress" in-map-name="shipToAddressCtx">
+            <result-to-field result-name="contactMechId" field="shipToContactMechId"/>
+
+        </call-service>
+            <field-to-result field="shipToContactMechId" result-name="shipToContactMechId"/>
+            <log level="info" message="===================shipToContactMechId is ${shipToContactMechId}================"></log>
+
+        <!-- Create Update Shipping Telecom Number -->
+        <set-service-fields service-name="createUpdatePartyTelecomNumber" map="shipToPhoneCtx" to-map="createUpdatePartyTelecomNumberCtx"/>
+        <set field="createUpdatePartyTelecomNumberCtx.userLogin" from-field="userLogin"/>
+        <set field="createUpdatePartyTelecomNumberCtx.partyId" from-field="partyId"/>
+        <set field="createUpdatePartyTelecomNumberCtx.roleTypeId" value="CUSTOMER"/>
+        <set field="createUpdatePartyTelecomNumberCtx.contactMechPurposeTypeId" value="PHONE_SHIPPING"/>
+        <if-not-empty field="contactMechId">
+          <set field="createUpdatePartyTelecomNumberCtx.contactMechId" from-field="contactMechId"/>
+        </if-not-empty>
+        <call-service service-name="createUpdatePartyTelecomNumber" in-map-name="createUpdatePartyTelecomNumberCtx">
+            <result-to-field result-name="contactMechId" field="phoneContactMechId"/>
+        </call-service>
+            <field-to-result field="phoneContactMechId" result-name="phoneContactMechId"/>
+ 
+        <if-not-empty field="phoneContactMechId">
+            <call-object-method obj-field="shoppingCart" method-name="addContactMech">
+                <string value="PHONE_SHIPPING"/>
+                <field field="phoneContactMechId"/>
+            </call-object-method>
+        </if-not-empty>
+
+        <!-- Create Update email address -->
+        <set-service-fields service-name="createUpdatePartyEmailAddress" map="emailAddressCtx" to-map="createUpdatePartyEmailCtx"/>
+        <set field="createUpdatePartyEmailCtx.contactMechPurposeTypeId" value="PRIMARY_EMAIL"/>
+        <set field="createUpdatePartyEmailCtx.userLogin" from-field="userLogin"/>
+        <set field="createUpdatePartyEmailCtx.partyId" from-field="partyId"/>
+        <call-service service-name="createUpdatePartyEmailAddress" in-map-name="createUpdatePartyEmailCtx">
+            <result-to-field result-name="contactMechId" field="parameters.emailContactMechId"/>
+            <result-to-result result-name="contactMechId"/>
+        </call-service>
+        <field-to-result field="partyId"/>
+        <if-not-empty field="parameters.emailContactMechId">
+            <call-object-method obj-field="shoppingCart" method-name="addContactMech">
+                <string value="ORDER_EMAIL"/>
+                <field field="parameters.emailContactMechId"/>
+            </call-object-method>
+        </if-not-empty>
+
+        <call-object-method obj-field="shoppingCart" method-name="setUserLogin">
+            <field field="userLogin" type="org.ofbiz.entity.GenericValue"/>
+            <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+        </call-object-method>
+        <call-object-method obj-field="shoppingCart" method-name="addContactMech">
+            <string value="SHIPPING_LOCATION"/>
+            <field field="shipToContactMechId"/>
+        </call-object-method>
+        <call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
+            <field field="shipToContactMechId"/>
+        </call-object-method>
+        <call-object-method obj-field="shoppingCart" method-name="setOrderPartyId">
+            <field field="partyId"/>
+        </call-object-method>
+    </simple-method>
+
+
+    <simple-method method-name="getPartyContactInfo" short-description="Wrapper service to get party firstName,LastName, emailAddress, postal address,and contactNumber" login-required="true">
+      <set field="partyId" from-field="parameters.partyId"/>
+      <set-service-fields service-name="getPartyPostalAddress" map="parameters" to-map="partyCtx"/>
+        <call-service service-name="getPartyPostalAddress" in-map-name="partyCtx" >
+          <result-to-field result-name="address1" field="shipToAddress1"/>
+          <result-to-field result-name="address2" field="shipToAddress2"/>
+          <result-to-field result-name="city" field="shipToCity"/>
+          <result-to-field result-name="postalCode" field="shipToPostalCode"/>
+          <result-to-field result-name="contactMechId" field="shipToContactMechId"/>
+          <result-to-field result-name="stateProvinceGeoId" field="stateProvinceGeoId"/>
+        </call-service>
+        <field-to-result field="stateProvinceGeoId" result-name="stateProvinceGeoId"/>
+        <field-to-result field="shipToAddress1" result-name="shipToAddress1"/>
+        <field-to-result field="shipToAddress2" result-name="shipToAddress2"/>
+        <field-to-result field="shipToCity" result-name="shipToCity"/>
+        <field-to-result field="shipToPostalCode" result-name="shipToPostalCode"/>
+        <field-to-result field="shipToContactMechId" result-name="shipToContactMechId"/>
+       <call-service service-name="getPartyTelephone" in-map-name="partyCtx">
+         <result-to-result result-name="phoneContactMechId"/>
+         <result-to-result result-name="contactNumber"/>
+         <result-to-field result-name="contactMechId" field="phoneContactMechId"/>
+       </call-service>
+         <field-to-result field="phoneContactMechId" result-name="phoneContactMechId"/>
+       <call-service service-name="getPartyEmail" in-map-name="partyCtx">
+         <result-to-field result-name="contactMechId" field="emailContactMechId"/>
+         <result-to-field result-name="emailAddress" field="emailAddress"/>
+       </call-service>
+         <field-to-result field="emailContactMechId" result-name="emailContactMechId"/>
+         <field-to-result field="emailAddress" result-name="emailAddress"/>
+       <call-service service-name="getPartyNameForDate" in-map-name="partyCtx">
+         <result-to-result result-name="firstName"/>
+         <result-to-result result-name="lastName"/>
+       </call-service>
+    </simple-method>
+</simple-methods>

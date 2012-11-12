@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+  <simple-method method-name="createAndAddNewCategory" short-description="Wrapper Service To Create and Add Product Category" login-required="true">
+        <set field="createCategoryCtx.productCategoryId" from-field="parameters.productCategoryId"/>
+        <set field="createCategoryCtx.productCategoryTypeId" from-field="parameters.productCategoryTypeId"/>
+        <set field="createCategoryCtx.description" from-field="parameters.description"/>
+        <set field="createCategoryCtx.primaryParentCategoryId" from-field="parameters.parentProductCategoryId"/>
+        <set field="createCategoryCtx.categoryName" from-field="parameters.categoryName"/>
+        <call-service service-name="createProductCategory" in-map-name="createCategoryCtx" />
+
+        <set field="addCategoryCtx.parentProductCategoryId" from-field="parameters.parentProductCategoryId"/>
+        <set field="addCategoryCtx.productCategoryId" from-field="parameters.productCategoryId"/>
+        <call-service service-name="addProductCategoryToCategory" in-map-name="addCategoryCtx"/>
+
+  </simple-method>
+  
+  <simple-method method-name="createHwareTax" short-description="">
+      <set field="createCategoryCtx.categoryName" from-field="parameters.categoryName"/>
+      <set field="createCategoryCtx.productCategoryTypeId" value="TAX_CATEGORY"/>
+      <call-service service-name="createProductCategory" in-map-name="createCategoryCtx">
+          <result-to-field result-name="productCategoryId"/>
+      </call-service>
+      <set field="createTaxAuthorityRateProductCtx.taxAuthGeoId" value="_NA_"/>
+      <set field="createTaxAuthorityRateProductCtx.taxAuthPartyId" value="_NA_"/>
+      <set field="createTaxAuthorityRateProductCtx.taxAuthorityRateTypeId" value="SALES_TAX"/>
+      <set field="createTaxAuthorityRateProductCtx.taxPercentage" from-field="parameters.taxPercentage" type="BigDecimal"/>
+      <set field="createTaxAuthorityRateProductCtx.productStoreId" from-field="parameters.productStoreId"/>
+      <set field="createTaxAuthorityRateProductCtx.productCategoryId" from-field="productCategoryId"/>
+      <call-service service-name="createTaxAuthorityRateProduct" in-map-name="createTaxAuthorityRateProductCtx"/>
+  </simple-method>
+  
+  <simple-method method-name="taxAssoc" short-description="Associates the products with the tax categories created">
+  <set field="addProductCtx.productCategoryId" from-field="parameters.productCategoryId" />
+  <set field="addProductCtx.productId" from-field="parameters.productId" />
+  <set field="addProductCtx.productCategoryTypeId" value="TAX_CATEGORY"/>
+  
+  <call-service service-name="addProductToCategory" in-map-name="addProductCtx"/>
+  
+  <entity-and entity-name="TaxAuthorityRateProduct" list="TaxList">
+   <field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+  </entity-and>
+  <first-from-list entry="Tax" list="TaxList"/>
+  <entity-and entity-name="ProductPrice" list="ProductList">
+   <field-map field-name="productId" from-field="parameters.productId"/>
+  </entity-and>
+  <first-from-list entry="defaultProductPrice" list="ProductList"/>
+  <set field="OldPrice" value="${defaultProductPrice.price}" type="BigDecimal"/>
+  <set field="TaxPercentage" value="${(Tax.taxPercentage+100)}" type="BigDecimal"/>
+  <set field="Taxes" value="${(${(TaxPercentage)}/100)}" type="BigDecimal"/>
+  <set field="updateProductPriceCtx.productId" from-field="parameters.productId"/>
+  <set field="newPrice" value="${${(OldPrice)}/${(Taxes)}}" type="BigDecimal"/>
+  <set field="updateProductPriceCtx.price" from-field="newPrice" type="BigDecimal"/>
+  <set field="updateProductPriceCtx.fromDate" from-field="defaultProductPrice.fromDate"/>
+  <set field="updateProductPriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
+  <set field="updateProductPriceCtx.productPricePurposeId" value="PURCHASE"/>
+  <set field="updateProductPriceCtx.currencyUomId" value="INR"/>
+  <set field="updateProductPriceCtx.productStoreGroupId" value="_NA_"/>
+  <call-service service-name="updateProductPrice" in-map-name="updateProductPriceCtx"/>
+  </simple-method>
+  
+  <simple-method method-name="removeTaxCategory" short-description="Removes tax category associatedwith product">
+      <set field="removeProductCtx.productCategoryId" from-field="parameters.productCategoryId" />
+      <set field="removeProductCtx.productId" from-field="parameters.productId" />
+      <set field="removeProductCtx.fromDate" from-field="parameters.fromDate" />
+      <!-- old service code
+       <find-by-and entity-name="ProductCategoryMember" map="removeProductCtx" list="lookedUpValue"/>
+      <first-from-list entry="removeProduct" list="lookedUpValue"/>
+      <remove-value value-field="removeProduct"/>  -->
+  <log level="info" message="=========inmap=========================${removeProductCtx}"/>
+  <call-service service-name="removeProductFromCategory" in-map-name="removeProductCtx"/>
+  <entity-and entity-name="TaxAuthorityRateProduct" list="TaxRateList">
+   <field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+  </entity-and>
+  <first-from-list entry="Tax" list="TaxRateList"/>
+  <entity-and entity-name="ProductPrice" list="ProductList">
+   <field-map field-name="productId" from-field="parameters.productId"/>
+  </entity-and>
+  <first-from-list entry="defaultProductPrice" list="ProductList"/>
+  <set field="OldPrice" value="${defaultProductPrice.price}" type="BigDecimal"/>
+  <set field="TaxPercentage" value="${(Tax.taxPercentage)}" type="BigDecimal"/>
+  <set field="Taxes" value="${((${(TaxPercentage)}*${(OldPrice)})/100)}" type="BigDecimal"/>
+  <set field="updateProductPriceCtx.productId" from-field="parameters.productId"/>
+  <set field="newPrice" value="${${(OldPrice)}+${(Taxes)}}" type="BigDecimal"/>
+  <set field="updateProductPriceCtx.price" from-field="newPrice" type="BigDecimal"/>
+  <set field="updateProductPriceCtx.fromDate" from-field="defaultProductPrice.fromDate"/>
+  <set field="updateProductPriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
+  <set field="updateProductPriceCtx.productPricePurposeId" value="PURCHASE"/>
+  <set field="updateProductPriceCtx.currencyUomId" value="INR"/>
+  <set field="updateProductPriceCtx.productStoreGroupId" value="_NA_"/>
+  <call-service service-name="updateProductPrice" in-map-name="updateProductPriceCtx"/>
+  </simple-method>
+</simple-methods>

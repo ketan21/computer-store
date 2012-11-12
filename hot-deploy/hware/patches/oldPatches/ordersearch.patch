@@ -1,0 +1,70 @@
+Index: servicedef/services.xml
+===================================================================
+--- applications/order/servicedef/services.xml	(revision 1027953)
++++ applications/order/servicedef/services.xml	(working copy)
+@@ -788,6 +788,8 @@
+
+         <attribute name="userLoginId" type="String" mode="IN" optional="true"/>
+         <attribute name="roleTypeId" type="List" mode="IN" optional="true"/> <!-- can pass multiple values as list -->
+         <attribute name="partyId" type="String" mode="IN" optional="true"/>
+-
++        
++        <attribute name="firstName" type="String" mode="IN" optional="true"/>
++        <attribute name="lastName" type="String" mode="IN" optional="true"/>
+         <!-- order item fields -->
+         <attribute name="correspondingPoId" type="String" mode="IN" optional="true"/>
+         <attribute name="subscriptionId" type="String" mode="IN" optional="true"/>
+Index: src/org/ofbiz/order/order/OrderLookupServices.java
+===================================================================
+--- src/org/ofbiz/order/order/OrderLookupServices.java	(revision 1027953)
++++ src/org/ofbiz/order/order/OrderLookupServices.java	(working copy)
+@@ -265,6 +265,9 @@
+             paramList.add("isViewed=" + isViewed);
+             conditions.add(makeExpr("isViewed", isViewed));
+         }
++         
++        
++        
+ 
+         // Shipment Method
+         String shipmentMethod = (String) context.get("shipmentMethod");
+@@ -308,15 +311,38 @@
+             paramList.add("gatewayScoreResult=" + gatewayScoreResult);
+             conditions.add(EntityCondition.makeCondition("gatewayScoreResult", gatewayScoreResult));
+         }
++        
++        String firstName = (String) context.get("firstName");
++        String lastName = (String) context.get("lastName");
+ 
+         // add the role data to the view
+-        if (roleTypeList != null || partyId != null) {
++        if (roleTypeList != null || partyId != null || firstName!=null || lastName!=null ) {
+             dve.addMemberEntity("OT", "OrderRole");
+             dve.addAlias("OT", "partyId");
+             dve.addAlias("OT", "roleTypeId");
+             dve.addViewLink("OH", "OT", Boolean.FALSE, UtilMisc.toList(new ModelKeyMap("orderId", "orderId")));
+         }
+ 
++      //find order by first name
++       
++        if (firstName != null || lastName != null) {
++        	dve.addMemberEntity("PER", "Person");
++        	dve.addAlias("PER", "firstName");
++        	dve.addAlias("PER", "lastName");
++        	dve.addViewLink("OT", "PER", Boolean.FALSE, UtilMisc.toList(new ModelKeyMap("partyId", "partyId")));
++        	}
++        
++        if (firstName != null) {
++        	paramList.add("firstName=" + firstName);
++            conditions.add((EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("firstName"), EntityComparisonOperator.EQUALS, EntityFunction.UPPER(firstName))));
++            
++        }
++        if (lastName != null) {
++        	paramList.add("lastName=" + lastName);
++            conditions.add((EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("lastName"), EntityComparisonOperator.EQUALS, EntityFunction.UPPER(lastName))));
++        	
++        }
++               
+         if (UtilValidate.isNotEmpty(partyId)) {
+             paramList.add("partyId=" + partyId);
+             fieldsToSelect.add("partyId");

@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="main-decorator">
+        <section>
+            <actions>
+                <property-map resource="HwareUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OrderErrorUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="ManufacturingUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="WorkEffortUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="ContentUiLabels" map-name="uiLabelMap" global="true"/>
+
+                <set field="layoutSettings.companyName" from-field="uiLabelMap.hwareCompanyName" global="true"/>
+                <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.hwareCompanySubtitle" global="true"/>
+
+                <set field="activeApp" value="hware" global="true"/>
+                <set field="applicationMenuName" value="MainAppBar" global="true"/>
+                <set field="applicationMenuLocation" value="component://hware/widget/HwareMenus.xml" global="true"/>
+                <set field="applicationTitle" value="${uiLabelMap.hwareApplication}" global="true"/>
+                <set field="initialLocale" type="String" value="${groovy:parameters?.userLogin?.lastLocale?.substring(0,2)}" default-value="${groovy:locale?.toString()?.substring(0,2)?:'en'}"/>
+                <!-- The default (global) javascripts -->
+                <set field="layoutSettings.javaScripts[+0]" value="/resources/jquery/jquery-1.4.2.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+1]" value="/resources/jquery/ui/development-bundle/ui/i18n/jquery.ui.datepicker-${initialLocale}.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+2]" value="/resources/jquery/ui/development-bundle/ui/jquery.ui.datepicker.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+3]" value="/resources/jquery/plugins/jeditable/jquery.jeditable.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+4]" value="/resources/jquery/plugins/datetimepicker/jquery-ui-timepicker-addon-0.7.2.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+5]" value="/resources/jquery/ui/development-bundle/ui/jquery-ui-1.8.2.custom.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+6]" value="/resources/jquery/plugins/jquery.dependent.js" global="true"/>
+
+                <set field="layoutSettings.javaScripts[]" value="/hware/js/selectall.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/hware/js/fieldlookup.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/images/GooglemapMarkers.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/hware/js/dropdown.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/hware/js/HwareUtil.js" global="true"/>
+
+                <set field="layoutSettings.styleSheets[+0]" value="/resources/jquery/ui/css/ui-lightness/jquery-ui-1.8.2.custom.css" global="true"/>
+                <set field="layoutSettings.styleSheets[+1]" value="/hware/css/forms.css" global="true"/>
+                <set field="layoutSettings.commonHeaderImageLinkUrl" from-field="layoutSettings.commonHeaderImageLinkUrl" default-value="main" global="true"/>
+                <set field="visualThemeId" from-field="userPreferences.VISUAL_THEME" global="true"/>
+                <service service-name="getVisualThemeResources">
+                    <field-map field-name="visualThemeId"/>
+                    <field-map field-name="themeResources" from-field="layoutSettings"/>
+                </service>
+                <set field="layoutSettings" from-field="themeResources" default-value="${layoutSettings}" global="true"/>
+                <!-- globally parameterize the link to a customer's detail information -->
+                <set field="customerDetailLink" value="/partymgr/control/viewprofile?partyId=" global="true"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://hware/webapp/hware/includes/Header.ftl"/></html></platform-specific>
+                <platform-specific><html><html-template location="component://hware/webapp/hware/includes/AppbarOpen.ftl"/></html></platform-specific>
+                
+                <include-menu name="${applicationMenuName}" location="${applicationMenuLocation}"/>
+                <!-- render the appbar closing part -->
+                <platform-specific><html><html-template location="component://hware/webapp/hware/includes/AppbarClose.ftl"/></html></platform-specific>
+
+                <!-- render messages -->
+                <platform-specific><html><html-template location="component://common/webcommon/includes/messages.ftl"/></html></platform-specific>
+
+                <!-- render content area -->
+                <container style="contentarea">
+                    <decorator-section-include name="pre-body"/>
+                    <decorator-section-include name="body"/>
+                </container>
+
+                <!-- render footer -->
+                <platform-specific><html><html-template location="component://hware/webapp/hware/includes/Footer.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="hwareCommonDecorator">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <section>
+                            <condition>
+                                <if-has-permission permission="OFBTOOLS" action="_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <decorator-section-include name="body"/>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.hwareViewPermissionError}</label>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="states">
+        <section>
+            <widgets>
+                <platform-specific><html><html-template location="component://hware/webapp/hware/includes/states.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="CommonFacilityDecorator">
+        <section>
+            <actions>
+                <set field="headerItem" value="facility"/>
+                <set field="facilityId" from-field="parameters.facilityId"/>
+                <set field="appBarItem" value="Facility"/>
+                <set field="activeApp" value="hware" global="true"/>
+                <set field="applicationMenuName" value="FacilityAppBar"/>
+                <set field="applicationMenuLocation" value="component://hware/widget/HwareMenus.xml" global="true"/>
+                <set field="applicationTitle" value="${uiLabelMap.hwareApplication}" global="true"/>
+                <entity-one entity-name="Facility" value-field="facility"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="pre-body"/>
+                    <decorator-section name="body">
+                        <section>
+                            <condition>
+                                <if-service-permission service-name="facilityGenericPermission" main-action="VIEW"/>
+                            </condition>
+                            <widgets>
+                                <section>
+                                    <condition>
+                                        <or>
+                                            <not><if-empty field="facility"/></not>
+                                            <not><if-empty field="displayWithNoFacility"/></not>
+                                        </or>
+                                    </condition>
+                                    <widgets>
+                                        <decorator-section-include name="body"/>
+                                    </widgets>
+                                    <fail-widgets>
+                                        <label style="h3">${uiLabelMap.ProductErrorFacilityIdNotFound}</label>
+                                    </fail-widgets>
+                                </section>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.ProductFacilityViewPermissionError}</label>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="CatalogMainDecorator">
+        <section>
+            <actions>
+                <set field="activeApp" value="catalogmgr" global="false"/>
+                <set field="applicationMenuName" value="CatalogAppBar" global="false"/>
+                <set field="applicationMenuLocation" value="component://hware/widget/HwareMenus.xml" global="false"/>
+                <set field="applicationTitle" value="${uiLabelMap.ProductCatalogManagerApplication}" global="false"/>
+            </actions>
+            <widgets>
+                <include-screen name="ApplicationDecorator"/>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="PartyMainDecorator">
+        <section>
+            <actions>
+                <set field="activeApp" value="partymgr" global="false"/>
+                <set field="applicationMenuName" value="PartyAppBar" global="false"/>
+                <set field="applicationMenuLocation" value="component://hware/widget/HwareMenus.xml" global="false"/>
+                <set field="applicationTitle" value="${uiLabelMap.PartyManagerApplication}" global="false"/>
+            </actions>
+            <widgets>
+                <include-screen name="ApplicationDecorator"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ApplicationDecorator">
+        <section>
+            <actions>
+                <property-map resource="CommonExtUiLabels" map-name="uiLabelMap" global="true"/>
+                <service service-name="getUserPreferenceGroup" result-map="prefResult">
+                    <field-map field-name="userPrefGroupTypeId" value="GLOBAL_PREFERENCES"/>
+                </service>
+                <set field="userPreferences" from-field="prefResult.userPrefMap" global="true"/>
+                <entity-one entity-name="PartyNameView" value-field="partyNameView">
+                    <field-map field-name="partyId" from-field="userLogin.partyId"/>
+                </entity-one>
+                <set field="line.text" value="${uiLabelMap.CommonWelcome} ${person.firstName} ${person.middleName} ${person.lastName}"/>
+                <set field="line.urlText" value="[${userLogin.userLoginId}]"/>
+                <set field="line.url" value="/partymgr/control/viewprofile?partyId=${userLogin.partyId}"/>
+                <set field="layoutSettings.topLines[]" from-field="line" global="true"/>
+                <script location="component://commonext/webapp/ofbizsetup/organization/changeOrgPartyId.groovy"/><!-- to see ofbizsetup needs to be displayed -->
+                <set field="layoutSettings.suppressTab" value="ofbizsetup"/><!-- diseable ofbiz setup by default -->
+                <!-- system info notes -->
+                <service service-name="getLastSystemInfoNote" result-map="resultNote"/>
+                <set field="linkStart" value="/myportal/control/showPortletMainDecorator?portalPortletId="/>
+                <set field="layoutSettings.middleTopHeader" value="---------- ${uiLabelMap.CommonLastSytemNotes} ----------"/>
+                <set field="layoutSettings.middleTopMessage1" value="${groovy:resultNote.lastSystemInfoNote1!=null?resultNote.lastSystemInfoNote1.noteDateTime.toString().substring(0,16) + &quot; &quot; + resultNote.lastSystemInfoNote1.noteInfo:&quot;&quot;}"/>
+                <set field="layoutSettings.middleTopLink1" value="${linkStart}${resultNote.lastSystemInfoNote1.moreInfoPortletId}&amp;amp;id=${resultNote.lastSystemInfoNote1.moreInfoItemId}"/>
+                <set field="layoutSettings.middleTopMessage2" value="${groovy:resultNote.lastSystemInfoNote2!=null?resultNote.lastSystemInfoNote2.noteDateTime.toString().substring(0,16) + &quot; &quot; + resultNote.lastSystemInfoNote2.noteInfo:&quot;&quot;}"/>
+                <set field="layoutSettings.middleTopLink2" value="${linkStart}${resultNote.lastSystemInfoNote2.moreInfoPortletId}&amp;amp;id=${resultNote.lastSystemInfoNote2.moreInfoItemId}"/>
+                <set field="layoutSettings.middleTopMessage3" value="${groovy:resultNote.lastSystemInfoNote3!=null?resultNote.lastSystemInfoNote3.noteDateTime.toString().substring(0,16) + &quot; &quot; + resultNote.lastSystemInfoNote3.noteInfo:&quot;&quot;}"/>
+                <set field="layoutSettings.middleTopLink3" value="${linkStart}${resultNote.lastSystemInfoNote3.moreInfoPortletId}&amp;amp;id=${resultNote.lastSystemInfoNote3.moreInfoItemId}"/>
+            </actions>
+            <widgets>
+                <section>
+                    <condition><not><if-empty field="PartyAcctgPrefAndGroupList"/></not></condition><!-- produced by  changeOrgPartyId.groovy-->
+                    <actions>
+                        <set field="defaultOrganizationPartyId" value="${userPreferences.ORGANIZATION_PARTY}" global="true"/>
+                        <property-to-field resource="general" property="currency.uom.id.default" field="defaultCurrencyUomId"/>
+                        <entity-one entity-name="PartyAcctgPrefAndGroup" value-field="orgParty">
+                            <field-map field-name="partyId" from-field="defaultOrganizationPartyId"/>
+                        </entity-one>
+                        <set field="defaultOrganizationPartyCurrencyUomId" from-field="orgParty.baseCurrencyUomId" default-value="${defaultCurrencyUomId}" global="true"/>
+                        <set field="defaultOrganizationPartyGroupName" from-field="orgParty.groupName" global="true"/>
+                        <set field="dropdown.hiddenFieldList" from-field="hiddenFields" global="true"/>
+                        <set field="dropdown.action" value="setUserPreference"/>
+                        <set field="dropdown.textBegin" value="${uiLabelMap.CommonDefaultOrganizationPartyId} :"/>
+                        <set field="dropdown.dropDownList" from-field="PartyAcctgPrefAndGroupList"/>
+                        <set field="dropdown.selectionName" value="userPrefValue"/>
+                        <set field="dropdown.selectedKey" value="${defaultOrganizationPartyId}"/>
+                        <set field="dropdown.textEnd" value="[${defaultOrganizationPartyId}]"/>
+                        <set field="layoutSettings.topLines[]" from-field="dropdown" global="true"/>
+                    </actions>
+                    <widgets/>
+                </section>
+                <section>
+                    <condition><if-empty field="PartyAcctgPrefAndGroupList"/></condition>
+                    <actions>
+                       <set field="layoutSettings.suppressTab" value=""/><!-- enable ofbiz setup -->
+                    </actions>
+                    <widgets/>
+                </section>
+                <decorator-screen name="main-decorator">
+                    <decorator-section name="pre-body">
+                        <decorator-section-include name="pre-body"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <container id="column-container">
+                            <section>
+                                <condition>
+                                    <if-empty-section section-name="left-column"/>
+                                </condition>
+                                <widgets>
+                                    <container id="content-main-section">
+                                        <decorator-section-include name="body"/>
+                                    </container>
+                                </widgets>
+                                <fail-widgets>
+                                    <container style="left">
+                                        <decorator-section-include name="left-column"/>
+                                    </container>
+                                    <container id="content-main-section" style="leftonly">
+                                        <container style="no-clear">
+                                            <decorator-section-include name="body"/>
+                                        </container>
+                                    </container>
+                                </fail-widgets>
+                            </section>
+                            <container style="clear"></container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="CommonCatalogDecorator">
+        <section>
+            <widgets>
+                <decorator-screen name="CatalogMainDecorator">
+                    <decorator-section name="pre-body">
+                        <section>
+                            <!-- do check for CATALOG, _VIEW permission -->
+                            <condition>
+                                <and>
+                                    <if-has-permission permission="CATALOG" action="_VIEW"/>
+                                    <not><if-empty field="prodCatalogId"/></not>
+                                </and>
+                            </condition>
+                            <widgets>
+                                <include-menu name="CatalogTabBar" location="component://product/widget/catalog/CatalogMenus.xml"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                    <decorator-section name="left-column">
+                        <include-screen name="leftbar" location="component://product/widget/catalog/CommonScreens.xml"/>
+                    </decorator-section>                    
+                    <decorator-section name="body">
+                        <section>
+                            <!-- do check for CATALOG, _VIEW permission -->
+                            <condition>
+                                <if-has-permission permission="CATALOG" action="_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <container style="button-bar">
+                                    <link target="EditProdCatalog" text="${uiLabelMap.ProductNewProdCatalog}" style="buttontext create"/>
+                                </container>
+                                <container style="button-bar">
+                                    <link target="EditProdCatalog" text="NEW PRODUCT CATEGORY" style="buttontext create"/>
+                                </container>
+
+                                <decorator-section-include name="body"/>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.ProductCatalogViewPermissionError}</label>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="CommonCategoryDecorator">
+        <section>
+            <widgets>
+                <decorator-screen name="CatalogMainDecorator">
+                    <decorator-section name="pre-body">
+                        <section>
+                            <!-- do check for CATALOG, _VIEW permission -->
+                            <condition>
+                                <if-has-permission permission="CATALOG" action="_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <include-menu name="CategoryTabBar" location="component://hware/widget/catalog/CatalogMenus.xml"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                    <decorator-section name="left-column">
+                        <include-screen name="leftbar" location="component://product/widget/catalog/CommonScreens.xml"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <!-- do check for CATALOG, _VIEW permission -->
+                            <condition>
+                                <if-has-permission permission="CATALOG" action="_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <section>
+                                    <condition><not><if-empty field="productCategoryId"/></not></condition>
+                                    <widgets>
+                                    </widgets>
+                                </section>
+                                <decorator-section-include name="body"/>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.ProductCatalogViewPermissionError}</label>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="CommonQuoteDecorator">
+        <section>
+            <actions>
+              <set field="applicationMenuName" value="OrderAppBar" global="false"/>
+              <set field="applicationMenuLocation" value="component://hware/widget/HwareMenus.xml" global="false"/>
+              <set field="applicationTitle" value="${uiLabelMap.hwareApplication}" global="false"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                  <decorator-section name="body">
+                    <section>
+                      <condition>
+                        <if-compare field="showTabBar" operator="equals" value="Y"/>
+                      </condition>
+                      <widgets>
+                        <include-menu name="QuoteTabBar" location="component://hware/widget/HwareMenus.xml"/>
+                      </widgets>
+                    </section>
+
+
+                        <section>
+                            <condition>
+                                <if-has-permission permission="OFBTOOLS" action="_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <decorator-section-include name="body"/>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.hwareViewPermissionError}</label>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="CommonProductDecorator">
+        <section>
+            <widgets>
+                <decorator-screen name="CatalogMainDecorator">
+                    <decorator-section name="pre-body">
+                        <section>
+                            <!-- do check for CATALOG, _VIEW permission -->
+                            <condition>
+                                <if-has-permission permission="CATALOG" action="_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <include-menu name="ProductsMainTabBar" location="component://hware/widget/catalog/CatalogMenus.xml"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                    <decorator-section name="left-column">
+                        <include-screen name="leftbar" location="component://product/widget/catalog/CommonScreens.xml"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <!-- do check for CATALOG, _VIEW permission -->
+                            <condition>
+                                <if-has-permission permission="CATALOG" action="_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <section>
+                                    <condition><not><if-empty field="productCategoryId"/></not></condition>
+                                    <widgets>
+                                    </widgets>
+                                </section>
+                                <decorator-section-include name="body"/>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.ProductCatalogViewPermissionError}</label>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

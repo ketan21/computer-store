@@ -1,0 +1,19 @@
+Index: applications/order/src/org/ofbiz/order/shoppingcart/CheckOutEvents.java
+===================================================================
+--- applications/order/src/org/ofbiz/order/shoppingcart/CheckOutEvents.java	(revision 1148274)
++++ applications/order/src/org/ofbiz/order/shoppingcart/CheckOutEvents.java	(working copy)
+@@ -548,7 +548,13 @@
+ 
+         // load the ProductStore settings
+         GenericValue productStore = ProductStoreWorker.getProductStore(cart.getProductStoreId(), delegator);
+-        Map callResult = checkOutHelper.processPayment(productStore, userLogin, false, holdOrder);
++        String fToF = (String)session.getAttribute("faceToFace");
++        boolean faceToFace=true;
++        if (fToF.equalsIgnoreCase("false"))
++        {
++        	faceToFace=false;
++        }
++        Map callResult = checkOutHelper.processPayment(productStore, userLogin, faceToFace, holdOrder);
+ 
+         if (ServiceUtil.isError(callResult)) {
+             // clear out the rejected payment methods (if any) from the cart, so they don't get re-authorized

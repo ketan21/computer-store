@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <property key="hwareApplication">
+        <value xml:lang="en_US">Hware Application</value>
+        <value xml:lang="en_IN">Hware Application</value>
+    </property>
+    <property key="hwareCompanyName">
+        <value xml:lang="en_US">Hware</value>
+        <value xml:lang="en_IN">Hware</value>
+    </property>
+    <property key="hwareCompanySubtitle">
+        <value xml:lang="en_US">Integrated software to manage your computer hardware shop</value>
+        <value xml:lang="en_IN">Integrated software to manage your computer hardware shop</value>
+    </property>
+    <property key="hwareViewPermissionError">
+        <value xml:lang="en_US">You are not allowed to view this page.</value>
+        <value xml:lang="en_IN">You are not allowed to view this page.</value>
+    </property>
+</resource>

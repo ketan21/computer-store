@@ -1,0 +1,13 @@
+Index: applications/order/servicedef/services.xml
+===================================================================
+--- applications/order/servicedef/services.xml	(revision 1148274)
++++ applications/order/servicedef/services.xml	(working copy)
+@@ -801,6 +801,8 @@
+         <attribute name="userLoginId" type="String" mode="IN" optional="true"/>
+         <attribute name="roleTypeId" type="List" mode="IN" optional="true"/> <!-- can pass multiple values as list -->
+         <attribute name="partyId" type="String" mode="IN" optional="true"/>
++        <attribute name="firstName" type="String" mode="IN" optional="true"/>
++        <attribute name="lastName" type="String" mode="IN" optional="true"/>
+ 
+         <!-- order item fields -->
+         <attribute name="correspondingPoId" type="String" mode="IN" optional="true"/>

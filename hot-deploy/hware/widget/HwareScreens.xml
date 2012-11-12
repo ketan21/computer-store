@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="OrderMain">
+        <section>
+            <actions>
+            	<set field="headerItem" value="order"/>
+            	<set field="parameters.portalPageId" value="OrderPortalPage"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="OrderDecorator" location="component://hware/widget/order/OrderScreens.xml">
+                    <decorator-section name="body">
+                        <include-screen name="PortalPageScreen" location="component://common/widget/CommonScreens.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FacilityMain">
+        <section>
+            <actions>
+                <set field="titleProperty" value="ProductFindFacilities"/>
+                <set field="headerItem" value="facility"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/FindFacility.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="FacilityDecorator" location="component://hware/widget/facility/FacilityScreens.xml">
+                    <decorator-section name="body">
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="selectProductStore">
+        <section>
+            <actions>
+                <set field="headerItem" value="selectProductStore"/><!-- this highlights the selected menu-item with name "selectProductStore" -->
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://hware/webapp/hware/includes/SetProductStore.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ChooseProductStore">
+        <section>
+            <actions>
+                <set field="headerItem" value="selectProductStore"/><!-- this highlights the selected menu-item with name "selectProductStore" -->
+                <set field="tabButtonItem" value="ViewFacilityInventoryByProduct"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE"/>
+                <!-- This is the target of the search form-->
+                <set field="facilityInventoryByProductScreen" value="ViewFacilityInventoryByProduct"/>
+                <set field="facilityId" from-field="parameters.facilityId"/>
+                <set field="productTypeId" from-field="parameters.productTypeId"/>
+                <set field="searchInProductCategoryId" from-field="parameters.searchInProductCategoryId"/>
+                <set field="productSupplierId" from-field="parameters.productSupplierId"/>
+                <set field="offsetQOHQty" from-field="parameters.offsetQOHQty"/>
+                <set field="offsetATPQty" from-field="parameters.offsetATPQty"/>
+                <set field="productsSoldThruTimestamp" from-field="parameters.productsSoldThruTimestamp" type="Timestamp"/>
+                <set field="internalName" from-field="parameters.internalName"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <set field="statusId" from-field="parameters.statusId"/>
+           <!-- This field is used to check if user wants to view products from all facilities  -->
+                <set field="showProductFromAllFacility" from-field="parameters.showProductFromAllFacility"/>
+                <!-- do not use the CountFacilityInventoryByProduct.groovy script unless the issues mentioned in it are correctly addressed -->
+                <script location="component://hware/webapp/hware/WEB-INF/actions/ViewFacilityInventoryByProduct.groovy"/>
+                <entity-one entity-name="Facility" value-field="facility" auto-field-map="false">
+                    <field-map field-name="facilityId" from-field="facilityId"/>
+                </entity-one>
+                <script location="component://hware/webapp/hware/WEB-INF/actions/ViewFacilityInventoryByProduct.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/ShowCart.groovy"/>
+                <entity-condition list="categories" entity-name="ProductCategory">
+                    <condition-expr field-name="primaryParentCategoryId" operator="equals" from-field="parameters.topCategoryId"/>
+                </entity-condition>
+                <entity-condition list="brands" entity-name="ProductCategoryRollupAndChild"/>
+                <entity-condition list="products" entity-name="ProductAndCategoryMember"/>
+                <property-map resource="ProductUiLabels" map-name="uiLabelMap"/>
+                <set field="title" value="${uiLabelMap.PageTitleFindFacilityInventoryItems}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="FacilityDecorator" location="component://hware/widget/facility/FacilityScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://hware/webapp/hware/includes/SelectProductStore.ftl"/>
+                            </html>
+                        </platform-specific>
+                        <decorator-screen name="FindScreenDecorator" location="component://hware/widget/facility/FacilityScreens.xml">
+                            <decorator-section name="search-results">
+                                <include-form name="ListFacilityInventoryByProduct" location="component://hware/widget/HwareForms.xml"/>
+                            </decorator-section>
+                        </decorator-screen>
+                   </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+ 
+     <screen name="CompanyLogo">
+        <section>
+            <actions>
+                <script location="component://hware/webapp/hware/WEB-INF/actions/HwareCompanyHeader.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><xsl-fo><html-template location="component://order/webapp/ordermgr/order/companyHeader.fo.ftl"/></xsl-fo></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+ </screens>

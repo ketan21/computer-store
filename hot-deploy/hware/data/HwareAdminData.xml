@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entity-engine-xml>
+    <Party partyId="admin" partyTypeId="PERSON"/>
+    <Person firstName="The" lastName="Priviliged Admin" partyId="admin"/>
+    <UserLogin userLoginId="admin" currentPassword="{SHA}47ca69ebb4bdc9ae0adec130880165d2cc05db1a" partyId="admin"/>
+    <PartyRole partyId="admin" roleTypeId="OWNER" fromDate="2010-03-21 20:33:28.739"/>
+    <UserLoginSecurityGroup userLoginId="admin" groupId="FULLADMIN" fromDate="2010-03-21 20:33:28.739"/>
+    
+</entity-engine-xml>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
+     <!-- The controller elements that are common to all OFBiz components
+          can be found in the following xml file. A component can override the
+          elements found in the common-controller.xml file. -->
+     <include location="component://common/webcommon/WEB-INF/common-controller.xml" />
+     <include location="component://hware/webapp/hware/WEB-INF/order-controller.xml" />
+     <include location="component://hware/webapp/hware/WEB-INF/facility-controller.xml" />
+     <include location="component://hware/webapp/hware/WEB-INF/catalog-controller.xml" />
+     <include location="component://hware/webapp/hware/WEB-INF/party-controller.xml" />
+
+       <preprocessor>
+        <event name="checkProductStoreId" type="java" path="com.softitude.hware.CommonEvents" invoke="checkProductStoreId"/>
+       </preprocessor>
+
+       <after-login>
+        <event name="checkProductStoreId" type="java" path="com.softitude.hware.CommonEvents" invoke="checkProductStoreId"/>
+      </after-login>
+</site-conf>

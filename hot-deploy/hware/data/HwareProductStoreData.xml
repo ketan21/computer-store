@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entity-engine-xml>
+
+    <Facility facilityId="WebexIndore" facilityTypeId="WAREHOUSE" facilityName="Webex warehouse Indore" description="" ownerPartyId="Company" defaultInventoryItemTypeId="NON_SERIAL_INV_ITEM"/>
+    <Facility facilityId="WebexBhopal" facilityTypeId="WAREHOUSE" facilityName="Webex warehouse Bhopal" description="" ownerPartyId="Company" defaultInventoryItemTypeId="NON_SERIAL_INV_ITEM"/>
+
+    <!-- Webex Product Store - Responsible for the sale of products -->
+
+    <ProductStore productStoreId="4000" storeName="Webex Store Indore" companyName="Webex Computer Indore" title="Webex Computer Indore"
+        subtitle="" payToPartyId="Company" daysToCancelNonPay="30" prorateShipping="Y" prorateTaxes="Y"
+        inventoryFacilityId="WebexIndore" oneInventoryFacility="Y" checkInventory="Y" reserveInventory="N" balanceResOnOrderCreation="Y" reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="Y"
+        defaultLocaleString="en_US" defaultCurrencyUomId="INR" defaultSalesChannelEnumId="WEB_SALES_CHANNEL" allowPassword="Y" explodeOrderItems="N" retryFailedAuths="Y" reqReturnInventoryReceive="N"
+        headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED" digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
+        itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED" itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="WEBEX"
+        authDeclinedMessage="Your card has been declined. If you feel this an error, please call customer service."
+        authFraudMessage="Your card has been declined due to security concerns. Please call customer service."
+        authErrorMessage="There was an error processing you card. Please call customer service."
+        storeCreditValidDays="90" storeCreditAccountEnumId="FIN_ACCOUNT"
+        visualThemeId="" prodSearchExcludeVariants="Y" isImmediatelyFulfilled="Y" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y" showOutOfStockProducts="Y"/>
+
+        <ProductStore productStoreId="5000" storeName="Webex Store Bhopal" companyName="Webex Computer Bhopal" title="Webex Computer Bhopal"
+        subtitle="" payToPartyId="Company" daysToCancelNonPay="30" prorateShipping="Y" prorateTaxes="Y"
+        inventoryFacilityId="WebexBhopal" oneInventoryFacility="Y" checkInventory="Y" reserveInventory="Y" balanceResOnOrderCreation="Y" reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="N"
+        defaultLocaleString="en_US" defaultCurrencyUomId="INR" defaultSalesChannelEnumId="WEB_SALES_CHANNEL" allowPassword="Y" explodeOrderItems="N" retryFailedAuths="Y" reqReturnInventoryReceive="N"
+        headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED" digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
+        itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED" itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="WEBEX"
+        authDeclinedMessage="Your card has been declined. If you feel this an error, please call customer service."
+        authFraudMessage="Your card has been declined due to security concerns. Please call customer service."
+        authErrorMessage="There was an error processing you card. Please call customer service."
+        storeCreditValidDays="90" storeCreditAccountEnumId="FIN_ACCOUNT"
+        visualThemeId="" prodSearchExcludeVariants="Y" isImmediatelyFulfilled="Y" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y" showOutOfStockProducts="Y"/>
+
+        <ProductStoreRole partyId="admin" roleTypeId="OWNER" productStoreId="4000" fromDate="2010-03-21 20:33:28.739"/>
+        <ProductStoreRole partyId="admin" roleTypeId="OWNER" productStoreId="5000" fromDate="2010-03-21 20:33:28.739"/>
+
+</entity-engine-xml>
